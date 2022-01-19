@@ -1,4 +1,6 @@
 const express = require('express');
+const bodyParser = require('body-parser')
+
 const {SequelizePg, User } = require('./db');
 
 async function testConn() {
@@ -10,6 +12,7 @@ async function testConn() {
   }
 }
 testConn();
+
 SequelizePg.sync();
 /* SequelizePg.sync({forse:true}).then(()=> {
   User.create({
@@ -20,14 +23,41 @@ SequelizePg.sync();
   })
 }) */
 
+
+const jsonParser = bodyParser.json()
+
 const app = express();
-app.get('/', (request, response)=> {
+
+app.get('/',  (req, response)=> {
   response.send('hello world')
 });
-app.get('/alluser', async (request, response)=> {
+app.post('/createUser', jsonParser, async (request, response)=> {
+  const { fullName, email, password, dob } = request.body;
+  console.log(fullName);
+  await User.create({
+  fullName: fullName,
+  email: email,
+  password: password,
+  dob: dob,
+  }).then(res=>{
+  console.log(res);
+  }).catch(err=>console.log(err));    
+});
+app.get('/getUser/:fullName', async (request, response)=> {
   const allUsers = await User.findAll();
   response.send(allUsers);
-
+});
+app.get('/getUser', async (request, response)=> {
+  const allUsers = await User.findAll();
+  response.send(allUsers);
+});
+app.put('/updateUser', async (request, response)=> {
+  const allUsers = await User.findAll();
+  response.send(allUsers);
+});
+app.delete('/deleteUser', async (request, response)=> {
+  const allUsers = await User.findAll();
+  response.send(allUsers);
 });
 
 app.listen(3000, ()=> {
