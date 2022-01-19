@@ -22,6 +22,10 @@ SequelizePg.sync();
     dob: new Date(1922, 11, 30),
   })
 }) */
+function getJwt(data) {
+  unsignedToken = base64url(data.header) + "." + base64url(data.data)
+  JWT = unsignedToken + "." + base64url(HMAC256(unsignedToken, data.secret))
+}
 
 
 const jsonParser = bodyParser.json()
@@ -34,14 +38,15 @@ app.get('/',  (req, response)=> {
 app.post('/createUser', jsonParser, async (request, response)=> {
   const { fullName, email, password, dob } = request.body;
   console.log(fullName);
-  await User.create({
+  const newUser = await User.create({
   fullName: fullName,
   email: email,
   password: password,
   dob: dob,
   }).then(res=>{
   console.log(res);
-  }).catch(err=>console.log(err));    
+  }).catch(err=>console.log(err));
+  response.send(newUser);    
 });
 app.get('/getUser/:fullName', async (request, response)=> {
   const allUsers = await User.findAll();
@@ -59,7 +64,6 @@ app.delete('/deleteUser', async (request, response)=> {
   const allUsers = await User.findAll();
   response.send(allUsers);
 });
-
 app.listen(3000, ()=> {
   console.log('сервер запущен')
 });
