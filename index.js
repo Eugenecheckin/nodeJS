@@ -1,7 +1,9 @@
 const express = require('express');
 const bodyParser = require('body-parser')
+const CryptoJS = require("crypto-js");
+const jwt = require('jsonwebtoken');
 
-const {SequelizePg, User } = require('./db');
+const { SequelizePg, User } = require('./db');
 
 async function testConn() {
   try {
@@ -9,44 +11,42 @@ async function testConn() {
     console.log('Соединение установлено');
   } catch (error) {
     console.error('Ошибка соединения:', error);
-  }
+  }s
 }
 testConn();
 
 SequelizePg.sync();
-/* SequelizePg.sync({forse:true}).then(()=> {
-  User.create({
-    fullName: 'test user',
-    email: 'test@mail.ru',
-    password: '1abc',
-    dob: new Date(1922, 11, 30),
-  })
-}) */
-function getJwt(data) {
-  unsignedToken = base64url(data.header) + "." + base64url(data.data)
-  JWT = unsignedToken + "." + base64url(HMAC256(unsignedToken, data.secret))
-}
 
+const secret = 'TEST_SECRET';
 
-const jsonParser = bodyParser.json()
+const jsonParser = bodyParser.json();
 
 const app = express();
 
 app.get('/',  (req, response)=> {
   response.send('hello world')
 });
+
+const hassMess = "hassMess";
 app.post('/createUser', jsonParser, async (request, response)=> {
   const { fullName, email, password, dob } = request.body;
-  console.log(fullName);
+  const isRegistred = await User.findAll({ where:{ fullName:fullName } });
+  console.log("{{{{{{{{{{{{{{{{{{{{{{{{{{{{{",isRegistred);
+  if (isRegistred.length>0) {
+    response.status(400).json({message: "Пользователь с таким именем уже зарегистрирован"})
+  }    
+  const hasPassword = CryptoJS.AES.encrypt(hassMess, password).toString();
+  
   const newUser = await User.create({
   fullName: fullName,
   email: email,
-  password: password,
+  password: hasPassword,
   dob: dob,
   }).then(res=>{
-  console.log(res);
   }).catch(err=>console.log(err));
-  response.send(newUser);    
+  
+  const token = jwt.sign({ userData: fullName }, secret);
+  response.json(token);     
 });
 app.get('/getUser/:fullName', async (request, response)=> {
   const allUsers = await User.findAll();
