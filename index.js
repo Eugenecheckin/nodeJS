@@ -28,39 +28,37 @@ app.get('/',  (req, response)=> {
 });
 
 const hassMess = "hassMess";
-app.post('/createUser', jsonParser, async (request, response)=> {
+app.post('/signup', jsonParser, async (request, response)=> {
   const { fullName, email, password, dob } = request.body;
   const isRegistred = await User.findAll({ where:{ fullName:fullName } });  
   if (isRegistred.length>0) {
     response.status(400).json({message: "Пользователь с таким именем уже зарегистрирован"})
-  }    
-  const hasPassword = CryptoJS.AES.encrypt(hassMess, password).toString();
-  
+  } else {   
+  const hasPassword = CryptoJS.AES.encrypt(hassMess, password).toString();  
   const newUser = await User.create({
   fullName: fullName,
   email: email,
   password: hasPassword,
   dob: dob,
   }).then(res=>{
-  }).catch(err=>console.log(err));
-  
+  }).catch(err=>console.log(err));  
   const token = jwt.sign({ userData: fullName }, secret);
-  response.json(token);     
+  response.json({ token: token });
+  }     
 });
-app.get('/getUser/:fullName', async (request, response)=> {
-  const allUsers = await User.findAll();
+app.get('/login', jsonParser, async (request, response)=> {
+  const { authorization, fullName } = request.body;
+  const allUsers = await User.findAll({ where:{ fullName: fullName } });
   response.send(allUsers);
 });
-app.get('/getUser', async (request, response)=> {
-  const allUsers = await User.findAll();
+app.put('/update', jsonParser, async (request, response)=> {
+  const { authorization, fullName } = request.body;
+  const allUsers = await User.findAll({ where:{ fullName: fullName } });
   response.send(allUsers);
 });
-app.put('/updateUser', async (request, response)=> {
-  const allUsers = await User.findAll();
-  response.send(allUsers);
-});
-app.delete('/deleteUser', async (request, response)=> {
-  const allUsers = await User.findAll();
+app.delete('/delete', jsonParser, async (request, response)=> {
+  const { authorization, fullName } = request.body; 
+  const allUsers = await User.findAll({ where:{ fullName: fullName } });
   response.send(allUsers);
 });
 app.listen(3000, ()=> {
