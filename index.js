@@ -11,7 +11,7 @@ async function testConn() {
     console.log('Соединение установлено');
   } catch (error) {
     console.error('Ошибка соединения:', error);
-  }s
+  }
 }
 testConn();
 
@@ -30,8 +30,7 @@ app.get('/',  (req, response)=> {
 const hassMess = "hassMess";
 app.post('/createUser', jsonParser, async (request, response)=> {
   const { fullName, email, password, dob } = request.body;
-  const isRegistred = await User.findAll({ where:{ fullName:fullName } });
-  console.log("{{{{{{{{{{{{{{{{{{{{{{{{{{{{{",isRegistred);
+  const isRegistred = await User.findAll({ where:{ fullName:fullName } });  
   if (isRegistred.length>0) {
     response.status(400).json({message: "Пользователь с таким именем уже зарегистрирован"})
   }    
