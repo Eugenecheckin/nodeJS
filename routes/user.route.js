@@ -6,4 +6,4 @@ const userRouter = Router();
 userRouter.patch('/update', userController.update);
 userRouter.delete('/delete', userController.delete);
 
-module.exports = authRouter;
+module.exports = userRouter;

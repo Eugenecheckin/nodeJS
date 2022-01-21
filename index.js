@@ -4,6 +4,8 @@ const CryptoJS = require("crypto-js");
 const jwt = require('jsonwebtoken');
 
 const { SequelizePg, User } = require('./db');
+const authRoute = require('./routes/auth.route');
+const userRoute = require('./routes/user.route');
 
 async function testConn() {
   try {
@@ -17,18 +19,19 @@ testConn();
 
 SequelizePg.sync();
 
+const hassMess = "hassMess";
 const secret = 'TEST_SECRET';
 
 const jsonParser = bodyParser.json();
 
 const app = express();
-
+app.use(jsonParser);
 app.get('/',  (req, response)=> {
   response.send('hello world')
 });
 
-const hassMess = "hassMess";
-app.post('/signup', jsonParser, async (request, response)=> {
+
+app.post('/signup', async (request, response)=> {
   const { fullName, email, password, dob } = request.body;
   const isRegistred = await User.findAll({ where:{ fullName:fullName } });  
   if (isRegistred.length>0) {
