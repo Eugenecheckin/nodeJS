@@ -10,7 +10,7 @@ module.exports = (request, response, next) => {
     console.log(authorization);
     const token = authorization.split(' ')[1];  
     const verifyResult = jwt.verify(token, SECRET);
-    request.somedata = verifyResult.userData;
+    request.headers.somedata = verifyResult.userData;
     next();
   } catch {
     return response.status(403).json({message: "Пользователь не авторизован"})
