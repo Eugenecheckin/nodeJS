@@ -18,7 +18,6 @@ class AuthController {
         password: hasPassword,
         dob: dob,
         }).then(res=> {
-        console.log(res.dataValues.id);
         const token = jwt.sign({ userData: res.dataValues.id }, SECRET);
         response.json({ token: token });
         }).catch(err=>console.log(err));   
@@ -33,10 +32,9 @@ class AuthController {
       const verifyResult = jwt.verify(token, SECRET);
       if (!verifyResult) {
         response.status(403).json({message: "Ошибка авторизации"})  
-      } else {  
-        console.log(verifyResult.userData);
+      } else {
         const allUsers = await User.findAll({ where:{ id: verifyResult.userData } });
-        response.send(allUsers);
+        response.send({id: allUsers[0].id, name: allUsers[0].fullName, email: allUsers[0].email});
       }
     }
   }
