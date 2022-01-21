@@ -1,7 +1,7 @@
 const CryptoJS = require("crypto-js");
 const jwt = require('jsonwebtoken');
 
-const { HASH_MESS, SECRET } = require('./const')
+const { HASH_MESS, SECRET } = require('../config')
 const { User } = require('../db');
 
 class AuthController {
@@ -13,24 +13,20 @@ class AuthController {
     } else {   
         const hasPassword = CryptoJS.AES.encrypt(HASH_MESS, password).toString();  
         await User.create({
-        fullName: fullName,
-        email: email,
-        password: hasPassword,
-        dob: dob,
+          fullName,
+          email,
+          password: hasPassword,
+          dob,
         }).then(res=> {
-        const token = jwt.sign({ userData: res.dataValues.id }, SECRET);
-        response.json({ token: token });
+          const token = jwt.sign({ userData: res.dataValues.id }, SECRET);
+          response.status(200).json({ token });
         }).catch(err=>console.log(err));   
       }     
   }
-  async login(request, response) {  
-    const { somedata } = request.headers;
-    if (!somedata) {
-      response.status(403).json({message: "Пользователь не авторизован"})  
-    } else {
-      const allUsers = await User.findAll({ where:{ id: somedata } });
-      response.send({id: allUsers[0].id, name: allUsers[0].fullName, email: allUsers[0].email});      
-    }
+  async login(request, response) {
+    const { userId } = request.headers;    
+    const allUsers = await User.findOne({ where:{ id: userId } });
+    response.status(200).json({id: allUsers.id, name: allUsers.fullName, email: allUsers.email});   
   }
 }
 
