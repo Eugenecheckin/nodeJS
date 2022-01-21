@@ -24,18 +24,12 @@ class AuthController {
       }     
   }
   async login(request, response) {  
-    const { authorization } = request.headers;
-    const token = authorization.split(' ')[1];
-    if (!token) {
+    const { somedata } = request.headers;
+    if (!somedata) {
       response.status(403).json({message: "Пользователь не авторизован"})  
-    } else {  
-      const verifyResult = jwt.verify(token, SECRET);
-      if (!verifyResult) {
-        response.status(404).json({message: "Ошибка авторизации"})  
-      } else {
-        const allUsers = await User.findAll({ where:{ id: verifyResult.userData } });
-        response.send({id: allUsers[0].id, name: allUsers[0].fullName, email: allUsers[0].email});
-      }
+    } else {
+      const allUsers = await User.findAll({ where:{ id: somedata } });
+      response.send({id: allUsers[0].id, name: allUsers[0].fullName, email: allUsers[0].email});      
     }
   }
 }
