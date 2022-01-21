@@ -2,7 +2,7 @@ const CryptoJS = require("crypto-js");
 const jwt = require('jsonwebtoken');
 
 const { SECRET } = require('./const')
-const { User } = require('./db');
+const { User } = require('../db');
 
 class UserController {
   async update(request, response) {

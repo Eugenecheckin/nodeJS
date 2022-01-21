@@ -19,18 +19,20 @@ testConn();
 
 SequelizePg.sync();
 
-const hassMess = "hassMess";
-const secret = 'TEST_SECRET';
+
 
 const jsonParser = bodyParser.json();
 
 const app = express();
 app.use(jsonParser);
+app.use('/Auth', authRoute);
+app.use('/User', userRoute);
+
+/* const hassMess = "hassMess";
+const secret = 'TEST_SECRET';
 app.get('/',  (req, response)=> {
   response.send('hello world')
 });
-
-
 app.post('/signup', async (request, response)=> {
   const { fullName, email, password, dob } = request.body;
   const isRegistred = await User.findAll({ where:{ fullName:fullName } });  
@@ -97,7 +99,7 @@ app.delete('/delete', jsonParser, async (request, response)=> {
         response.status(200).json({message: "Пользователь удален"})  
       }
     }
-});
+}); */
 app.listen(3000, ()=> {
   console.log('сервер запущен')
 });
