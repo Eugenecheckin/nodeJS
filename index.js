@@ -2,8 +2,8 @@ const express = require('express');
 const bodyParser = require('body-parser')
 
 const { SequelizePg } = require('./db');
-const authRoute = require('./routes/auth.route');
-const userRoute = require('./routes/user.route');
+const authRoute = require('./routes/auth');
+const userRoute = require('./routes/user');
 
 async function testConn() {
   try {

@@ -12,6 +12,7 @@ class UserController {
         });
       }
     }
+    
   
   async delete(request, response) {
     const { somedata } = request.headers;
