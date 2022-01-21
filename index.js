@@ -35,7 +35,7 @@ app.post('/signup', jsonParser, async (request, response)=> {
     response.status(400).json({message: "Пользователь с таким именем уже зарегистрирован"})
   } else {   
       const hasPassword = CryptoJS.AES.encrypt(hassMess, password).toString();  
-      const newUser = await User.create({
+      await User.create({
       fullName: fullName,
       email: email,
       password: hasPassword,
@@ -63,7 +63,7 @@ app.get('/login', jsonParser, async (request, response)=> {
     }
   }
 });
-app.put('/update', jsonParser, async (request, response)=> {
+app.patch('/update', jsonParser, async (request, response)=> {
   const { updateName } = request.body;
   const { authorization } = request.headers;
   const token = authorization.split(' ')[1];
@@ -73,10 +73,8 @@ app.put('/update', jsonParser, async (request, response)=> {
     const verifyResult = jwt.verify(token, secret);
     if (!verifyResult) {
       response.status(403).json({message: "Ошибка авторизации"})  
-    } else { 
-      let test = await User.findAll( {where: { id: verifyResult.userData }} );
-      test.fullName = updateName;
-      await User.update( test, {where: { id: verifyResult.userData }} ).then(res=> {
+    } else {
+      await User.update( { fullName: updateName }, {where: { id: verifyResult.userData }} ).then(res=> {
       response.send({ result: res });    
       });  
     }
