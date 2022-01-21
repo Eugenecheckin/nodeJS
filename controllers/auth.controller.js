@@ -31,7 +31,7 @@ class AuthController {
     } else {  
       const verifyResult = jwt.verify(token, SECRET);
       if (!verifyResult) {
-        response.status(403).json({message: "Ошибка авторизации"})  
+        response.status(404).json({message: "Ошибка авторизации"})  
       } else {
         const allUsers = await User.findAll({ where:{ id: verifyResult.userData } });
         response.send({id: allUsers[0].id, name: allUsers[0].fullName, email: allUsers[0].email});

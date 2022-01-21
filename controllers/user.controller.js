@@ -14,7 +14,7 @@ class UserController {
     } else {  
       const verifyResult = jwt.verify(token, SECRET);
       if (!verifyResult) {
-        response.status(403).json({message: "Ошибка авторизации"})  
+        response.status(404).json({message: "Ошибка авторизации"})  
       } else {
         await User.update( { fullName: updateName }, {where: { id: verifyResult.userData }} ).then(res=> {
         response.send({ result: res });    
@@ -30,7 +30,7 @@ class UserController {
     } else {  
       const verifyResult = jwt.verify(token, SECRET);
       if (!verifyResult) {
-        response.status(403).json({message: "Ошибка авторизации"})  
+        response.status(404).json({message: "Ошибка авторизации"})  
       } else {  
           await User.destroy( {where:{ id: verifyResult.userData }} );
           response.status(200).json({message: "Пользователь удален"})  
