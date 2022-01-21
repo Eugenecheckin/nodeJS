@@ -1,3 +1,9 @@
+const CryptoJS = require("crypto-js");
+const jwt = require('jsonwebtoken');
+
+const { SECRET } = require('./const')
+const { User } = require('./db');
+
 class UserController {
   async update(request, response) {
     const { updateName } = request.body;
@@ -6,7 +12,7 @@ class UserController {
     if (!token) {
       response.status(403).json({message: "Пользователь не авторизован"})  
     } else {  
-      const verifyResult = jwt.verify(token, secret);
+      const verifyResult = jwt.verify(token, SECRET);
       if (!verifyResult) {
         response.status(403).json({message: "Ошибка авторизации"})  
       } else {
@@ -22,7 +28,7 @@ class UserController {
     if (!token) {
       response.status(403).json({message: "Пользователь не авторизован"})  
     } else {  
-      const verifyResult = jwt.verify(token, secret);
+      const verifyResult = jwt.verify(token, SECRET);
       if (!verifyResult) {
         response.status(403).json({message: "Ошибка авторизации"})  
       } else {  

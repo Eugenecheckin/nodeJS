@@ -1,4 +1,4 @@
-const hassMess = "hassMess";
-const secret = 'TEST_SECRET';
-
-module.exports = [{hassMess, secret}];
+module.exports = {
+  HASH_MESS: "hassMess", 
+  SECRET: "TEST_SECRET"
+}
