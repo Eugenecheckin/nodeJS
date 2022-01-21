@@ -1,4 +1,4 @@
-class AuthController{
+class AuthController {
   async sinUp(request, response) {
     const { fullName, email, password, dob } = request.body;
     const isRegistred = await User.findAll({ where:{ fullName:fullName } });  
