@@ -1,31 +1,31 @@
-const CryptoJS = require("crypto-js");
-const jwt = require('jsonwebtoken');
+const hash = require('../utils/hash');
+const getToken = require('../utils/getToken.js');
 
-const { HASH_MESS, SECRET } = require('../config')
-const { User } = require('../db');
+
+const db = require('../models/');
 
 class AuthController {
   async sinUp(request, response) {
     const { fullName, email, password, dob } = request.body;
-    const isRegistred = await User.findAll({ where:{ fullName:fullName } });  
+    const isRegistred = await db.User.findAll({ where:{ fullName:fullName } });  
     if (isRegistred.length>0) {
       response.status(400).json({message: "Пользователь с таким именем уже зарегистрирован"})
     } else {   
-        const hasPassword = CryptoJS.AES.encrypt(HASH_MESS, password).toString();  
-        await User.create({
+        const hasPassword = hash(password);  
+        await db.User.create({
           fullName,
           email,
           password: hasPassword,
           dob,
         }).then(res=> {
-          const token = jwt.sign({ userData: res.dataValues.email }, SECRET);
+          const token = getToken(res);
           response.status(200).json({ token });
         }).catch(err=>console.log(err));   
       }     
   }
   async login(request, response) {
     const { email } = request.headers;    
-    const allUsers = await User.findOne({ where:{ email: email } });
+    const allUsers = await db.User.findOne({ where:{ email: email } });
     response.status(200).json({id: allUsers.id, name: allUsers.fullName, email: allUsers.email});   
   }
 }
