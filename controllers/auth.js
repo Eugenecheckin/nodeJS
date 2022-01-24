@@ -25,7 +25,11 @@ const sinUp = async (request, response) => {
 const login = async (request, response) => {
   const { email } = request.headers;    
   const allUsers = await db.User.findOne({ where:{ email: email } });
-  response.status(200).json({id: allUsers.id, name: allUsers.fullName, email: allUsers.email});   
+  response.status(200).json({
+    id: allUsers.id,
+    name: allUsers.fullName,
+    email: allUsers.email
+  });   
 }
 
 module.exports = { sinUp, login };
