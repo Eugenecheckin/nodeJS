@@ -1,7 +1,7 @@
 const db = require('../models/');
 
-class UserController {
-  async update(request, response) {
+
+  const update = async (request, response) => {
     const { fullName } = request.body;
     const { email } = request.headers;    
     await db.User.update( { fullName }, {where: { email: email }} ).then(res=> {
@@ -9,11 +9,11 @@ class UserController {
     });
   }   
   
-  async delete(request, response) {
+  const destroy = async (request, response) => {
     const { email } = request.headers;    
     await db.User.destroy( {where:{ email: email }} );
     response.status(200).json({message: "Пользователь удален"})     
   }
-}
 
-module.exports = new UserController();
+
+module.exports = { update, destroy };
