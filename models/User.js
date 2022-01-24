@@ -14,12 +14,12 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   User.init({
-    /* id: {
+    id: {
       allowNull: false,
       autoIncrement: true,
       primaryKey: true,
       type: DataTypes.INTEGER
-    }, */
+    },
     fullName: {
       type: DataTypes.STRING,
       allowNull: false
@@ -38,7 +38,7 @@ module.exports = (sequelize, DataTypes) => {
     dob: {
       type: DataTypes.DATE,
       allowNull: false
-    }/* ,
+    },
     createdAt: {
       allowNull: false,
       type: DataTypes.DATE
@@ -46,7 +46,7 @@ module.exports = (sequelize, DataTypes) => {
     updatedAt: {
       allowNull: false,
       type: DataTypes.DATE
-    } */
+    }
   }, {
     sequelize,
     modelName: 'User',
