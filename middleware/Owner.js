@@ -8,6 +8,7 @@ module.exports = (request, response, next) => {
     const verifyResult = jwt.verify(token, SECRET);
     console.log(verifyResult);
     request.headers.email = verifyResult.email;
+    request.headers.isAdmin = verifyResult.isAdmin;
     next();
   } catch {
     return response.status(403).json({message: "Пользователь не авторизован"})
