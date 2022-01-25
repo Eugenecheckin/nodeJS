@@ -4,7 +4,7 @@ const getToken = require('../utils/getToken.js');
 
   const update = async (request, response) => {
     const { fullName } = request.body;
-    const { email , isAdmin } = request.headers;
+    const { email , isAdmin } = request.headers;    
     if(isAdmin) {
       const { newEmail } = request.body;
       await db.User.update( { fullName }, {where: { email: newEmail }} ).then(res=> {
