@@ -18,7 +18,7 @@ const sinUp = async (request, response) => {
         isAdmin
       }).then(res=> {
         const token = getToken(res);
-        response.status(200).json({ token });
+        response.status(200).json({ token , fullName, email});
       }).catch(err=>console.log(err));   
     }
 }

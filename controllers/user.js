@@ -1,4 +1,6 @@
 const db = require('../models/');
+const hash = require('../utils/hash');
+const getToken = require('../utils/getToken.js');
 
   const update = async (request, response) => {
     const { fullName } = request.body;

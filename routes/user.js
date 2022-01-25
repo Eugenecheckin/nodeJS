@@ -8,8 +8,8 @@ const userRouter = Router();
 
 userRouter.patch('/update', isOwner, update);
 userRouter.delete('/delete', isOwner, destroy);
-userRouter.post('/login', isAdmin, create);
-userRouter.get('/login', isAdmin, getList);
+userRouter.post('/create', isAdmin, create);
+userRouter.get('/getList', isAdmin, getList);
 
 
 
