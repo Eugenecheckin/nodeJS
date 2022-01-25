@@ -4,8 +4,8 @@ const getToken = require('../utils/getToken.js');
 
   const update = async (request, response) => {
     const { fullName } = request.body;
-    const { email , isAdmin } = request.headers;    
-    if(isAdmin) {
+    const { email , isAdmin } = request.headers;   
+    if(isAdmin==='true') {
       const { newEmail } = request.body;
       await db.User.update( { fullName }, {where: { email: newEmail }} ).then(res=> {
         response.status(200).json({
@@ -15,7 +15,7 @@ const getToken = require('../utils/getToken.js');
         });    
       });
     } else {     
-      await db.User.update( { fullName }, {where: { email }} ).then(res=> {
+      await db.User.update( { fullName }, {where: { email: email }} ).then(res=> {
         response.status(200).json({
           result: res,
           fullName,
@@ -27,7 +27,7 @@ const getToken = require('../utils/getToken.js');
   
   const destroy = async (request, response) => {
     const { isAdmin , email} = request.headers;
-    if (isAdmin) {
+    if (isAdmin==='true') {
       const { newEmail} = request.body;
       await db.User.destroy( {where:{ email: newEmail }} );
       response.status(200).json({message: "Пользователь удален", newEmail})
@@ -44,7 +44,7 @@ const getToken = require('../utils/getToken.js');
 
   const create = async (request, response) => {
   const { fullName, newEmail, password, dob, isAdmin } = request.body;
-  const isRegistred = await db.User.findAll({ where:{ fullName:fullName } });  
+  const isRegistred = await db.User.findAll({ where:{ email:newEmail } });  
   if (isRegistred.length>0) {
     response.status(400).json({message: "Пользователь с таким именем уже зарегистрирован"})
   } else {   
