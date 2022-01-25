@@ -6,7 +6,8 @@ module.exports = (request, response, next) => {
     const { authorization } = request.headers;
     const token = authorization.split(' ')[1];  
     const verifyResult = jwt.verify(token, SECRET);
-    request.headers.email = verifyResult.userData;
+    console.log(verifyResult);
+    request.headers.email = verifyResult.email;
     next();
   } catch {
     return response.status(403).json({message: "Пользователь не авторизован"})
