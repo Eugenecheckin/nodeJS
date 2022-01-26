@@ -37,9 +37,9 @@ const getToken = require('../utils/getToken.js');
   const destroy = async ( request, response ) => {
     const { isAdmin , email } = request.headers;
     if ( isAdmin === 'true' ) {
-      const { newEmail } = request.body;
-      await db.User.destroy( { where: { email: newEmail } } );
-      return response.status(200).json( { message: "Пользователь удален", newEmail } )
+      const { userEmail } = request.body;
+      await db.User.destroy( { where: { email: userEmail } } );
+      return response.status(200).json( { message: "Пользователь удален", userEmail } )
     }
     await db.User.destroy( { where: { email } } );
     response.status(200).json( { message: "Пользователь удален", email } )    
