@@ -1,5 +1,5 @@
 module.exports = {
-  HASH_MESS: 'testHassMess', 
+  HASH_MESS: 'testHassMess',
   SECRET: 'testSecret',
-  PORT: 3000
-}
+  PORT: 5000,
+};
