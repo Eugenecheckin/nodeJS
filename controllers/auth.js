@@ -66,4 +66,21 @@ const login = async (request, response) => {
   }
 };
 
-module.exports = { signUp, login, signIn };
+const test = async (request, response) => {
+  const email = 'admin@mail.ru';
+  try {
+    const allUsers = await db.User.findOne({ where: { email } });
+    response.status(200).json({
+      id: allUsers.id,
+      name: allUsers.fullName,
+      email: allUsers.email,
+      isAdmin: allUsers.isAdmin,
+    });
+  } catch (err) {
+    return response
+      .status(403)
+      .json({ message: 'Ошибка входа', err: err.message });
+  }
+};
+
+module.exports = { signUp, login, signIn, test };
