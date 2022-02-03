@@ -4,7 +4,7 @@ const getToken = require('../utils/getToken.js');
 const db = require('../models/');
 
 const signUp = async (request, response) => {
-  const { fullName, email, password, dob, isAdmin } = request.body;
+  const { fullName, email, password, phone, isAdmin } = request.body;
   const isRegistred = await db.User.findAll({ where: { email } });
   if (isRegistred.length > 0) {
     return response
@@ -17,7 +17,7 @@ const signUp = async (request, response) => {
       fullName,
       email,
       password: hasPassword,
-      dob,
+      phone,
       isAdmin,
     });
     const token = getToken(createdUser);
