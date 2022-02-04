@@ -21,7 +21,13 @@ const signUp = async (request, response) => {
       isAdmin,
     });
     const token = getToken(createdUser);
-    response.status(200).json({ token, fullName, email });
+    response.status(200).json({
+      token,
+      id: createdUser.id,
+      name: createdUser.fullName,
+      email: createdUser.email,
+      phone: createdUser.phone,
+    });
   } catch (err) {
     return response.status(403).json({
       message: 'Ошибка регистрации нового пользователя',
@@ -40,7 +46,7 @@ const signIn = async (request, response) => {
       id: signInUser.id,
       name: signInUser.fullName,
       email: signInUser.email,
-      isAdmin: signInUser.isAdmin,
+      phone: signInUser.phone,
     });
   } catch (err) {
     return response
