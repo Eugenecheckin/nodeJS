@@ -2,6 +2,7 @@ const hash = require('../utils/hash');
 const getToken = require('../utils/getToken.js');
 
 const db = require('../models/');
+const req = require('express/lib/request');
 
 const signUp = async (request, response) => {
   const { fullName, email, password, phone, isAdmin } = request.body;
@@ -89,4 +90,16 @@ const test = async (request, response) => {
   }
 };
 
-module.exports = { signUp, login, signIn, test };
+const upload = async (request, response) => {
+  try {
+    if (request.file) {
+      response.json('');
+    }
+  } catch (err) {
+    return response
+      .status(403)
+      .json({ message: 'Ошибка загрузки', err: err.message });
+  }
+};
+
+module.exports = { signUp, login, signIn, test, upload };

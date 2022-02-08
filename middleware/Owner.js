@@ -1,15 +1,17 @@
 const jwt = require('jsonwebtoken');
-const { SECRET } = require('../config')
+const { SECRET } = require('../config');
 
-module.exports = ( request, response, next ) => {  
-  try {  
+module.exports = (request, response, next) => {
+  try {
     const { authorization } = request.headers;
-    const token = authorization.split(' ')[1];  
+    const token = authorization.split(' ')[1];
     const verifyResult = jwt.verify(token, SECRET);
     request.headers.email = verifyResult.email;
     request.headers.isAdmin = verifyResult.isAdmin;
     next();
   } catch {
-    return response.status(403).json( { message: "Пользователь не авторизован" } )
+    return response
+      .status(403)
+      .json({ message: 'Пользователь не авторизован' });
   }
-}
+};
