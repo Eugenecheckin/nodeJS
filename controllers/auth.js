@@ -2,7 +2,6 @@ const hash = require('../utils/hash');
 const getToken = require('../utils/getToken.js');
 
 const db = require('../models/');
-const req = require('express/lib/request');
 
 const signUp = async (request, response) => {
   const { fullName, email, password, phone, isAdmin } = request.body;
