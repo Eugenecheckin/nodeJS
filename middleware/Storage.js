@@ -1,22 +1,15 @@
 const multer = require('multer');
+const { nanoid } = require('nanoid');
 
-const store = multer.diskStorage({
-  destination(request, responce, cb) {
-    cb(null, 'fileserver/');
+const storageConfig = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'fileserver');
   },
-  filename(request, file, cb) {
-    cb(null, file.originalname);
+  filename: (req, file, cb) => {
+    const name = nanoid() + '.' + file.mimetype.split('/')[1].split('+')[0];
+    cb(null, name);
+    req.headers.fileName = name;
   },
 });
 
-const types = ['image/jpg', 'image/jpeg', 'image/svg', 'image/png'];
-
-const fileFilter = (request, file, cb) => {
-  if (types.includes(file.mimetype)) {
-    cb(null, true);
-  } else {
-    cb(null, false);
-  }
-};
-
-module.exports = multer({ store, fileFilter });
+module.exports = multer({ storage: storageConfig }).single('file');

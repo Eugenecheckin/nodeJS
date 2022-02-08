@@ -93,7 +93,7 @@ const test = async (request, response) => {
 const upload = async (request, response) => {
   try {
     if (request.file) {
-      response.json('');
+      response.status(200).json(request.file);
     }
   } catch (err) {
     return response
