@@ -11,7 +11,6 @@ const jsonParser = bodyParser.json();
 app.use(jsonParser);
 app.use(cors());
 app.use('/fileserver', express.static(path.join(__dirname, 'fileserver')));
-console.log(path.join(__dirname, 'fileserver'));
 app.use('/Auth', authRoute);
 app.use('/User', userRoute);
 
