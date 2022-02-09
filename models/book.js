@@ -11,6 +11,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      book.belongsToMany(models.User, { through: 'bookUsers' });
     }
   }
   book.init(
@@ -59,5 +60,9 @@ module.exports = (sequelize, DataTypes) => {
       modelName: 'book',
     }
   );
+  /* book.associate = (models) => {
+    book.belongsToMany(models.User, { through: 'bookUsers' });
+  }; */
+
   return book;
 };
