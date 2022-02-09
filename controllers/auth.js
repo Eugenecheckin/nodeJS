@@ -47,6 +47,7 @@ const signIn = async (request, response) => {
       name: signInUser.fullName,
       email: signInUser.email,
       phone: signInUser.phone,
+      avatar: 'fileserver\\' + signInUser.avatar,
     });
   } catch (err) {
     return response
@@ -64,6 +65,8 @@ const login = async (request, response) => {
       name: allUsers.fullName,
       email: allUsers.email,
       isAdmin: allUsers.isAdmin,
+      phone: signInUser.phone,
+      avatar: signInUser.avatar,
     });
   } catch (err) {
     return response
@@ -91,7 +94,12 @@ const test = async (request, response) => {
 
 const upload = async (request, response) => {
   try {
+    const { fileName, email } = request.headers;
     if (request.file) {
+      const updatedUser = await db.User.update(
+        { avatar: fileName },
+        { where: { email } }
+      );
       response.status(200).json(request.file);
     }
   } catch (err) {
