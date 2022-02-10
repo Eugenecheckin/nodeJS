@@ -47,7 +47,8 @@ const signIn = async (request, response) => {
       name: signInUser.fullName,
       email: signInUser.email,
       phone: signInUser.phone,
-      avatar: 'fileserver\\' + signInUser.avatar,
+      avatar: signInUser.avatar != null ? signInUser.avatar : '',
+      isAdmin: signInUser.isAdmin,
     });
   } catch (err) {
     return response
@@ -66,7 +67,7 @@ const login = async (request, response) => {
       email: allUsers.email,
       isAdmin: allUsers.isAdmin,
       phone: signInUser.phone,
-      avatar: signInUser.avatar,
+      avatar: signInUser.avatar != null ? signInUser.avatar : '',
     });
   } catch (err) {
     return response

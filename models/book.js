@@ -60,9 +60,6 @@ module.exports = (sequelize, DataTypes) => {
       modelName: 'book',
     }
   );
-  /* book.associate = (models) => {
-    book.belongsToMany(models.User, { through: 'bookUsers' });
-  }; */
 
   return book;
 };
