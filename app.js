@@ -10,6 +10,7 @@ const app = express();
 //app.use(express.json({ extended: true }));
 const jsonParser = bodyParser.json();
 app.use(jsonParser);
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors());
 app.use('/fileserver', express.static(path.join(__dirname, 'fileserver')));
 app.use('/Auth', authRoute);
