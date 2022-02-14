@@ -1,4 +1,5 @@
 const db = require('../models/');
+const Sequelize = require('sequelize');
 
 const create = async (request, response) => {
   const { title, autor, year, genre, price } = request.body;
@@ -46,4 +47,69 @@ const load = async (request, response) => {
   }
 };
 
-module.exports = { create, load };
+const loadall = async (request, response) => {
+  try {
+    const loadBook = await db.book.findAll({
+      raw: true,
+    });
+
+    response.status(200).json(loadBook);
+  } catch (err) {
+    return response.status(403).json({
+      message: 'Ошибка загрузки книг',
+      err: err.message,
+    });
+  }
+};
+
+const loadautors = async (request, response) => {
+  try {
+    const autors = await db.book.findAll({
+      raw: true,
+      attributes: [Sequelize.fn('DISTINCT', Sequelize.col('autor')), 'autor'],
+    });
+
+    response.status(200).json(autors);
+  } catch (err) {
+    return response.status(403).json({
+      message: 'Ошибка загрузки книг',
+      err: err.message,
+    });
+  }
+};
+
+const loadganres = async (request, response) => {
+  try {
+    const genres = await db.book.findAll({
+      raw: true,
+      attributes: [Sequelize.fn('DISTINCT', Sequelize.col('genre')), 'genre'],
+    });
+
+    response.status(200).json(genres);
+  } catch (err) {
+    return response.status(403).json({
+      message: 'Ошибка загрузки книг',
+      err: err.message,
+    });
+  }
+};
+
+const price = async (request, response) => {
+  try {
+    const price = await db.book.findAll({
+      raw: true,
+      attributes: [Sequelize.fn('DISTINCT', Sequelize.col('price')), 'price'],
+    });
+    const min = Math.min(...price.map((i) => i.price));
+    const max = Math.max(...price.map((i) => i.price));
+
+    response.status(200).json({ min, max });
+  } catch (err) {
+    return response.status(403).json({
+      message: 'Ошибка загрузки книг',
+      err: err.message,
+    });
+  }
+};
+
+module.exports = { create, load, loadall, loadautors, loadganres, price };
