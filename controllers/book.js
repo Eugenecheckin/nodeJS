@@ -27,4 +27,23 @@ const create = async (request, response) => {
   }
 };
 
-module.exports = { create /* , login, signIn, test, upload */ };
+const load = async (request, response) => {
+  const { offset } = request.headers;
+
+  try {
+    const loadBook = await db.book.findAndCountAll({
+      raw: true,
+      offset: offset,
+      limit: 10,
+    });
+
+    response.status(200).json(loadBook);
+  } catch (err) {
+    return response.status(403).json({
+      message: 'Ошибка загрузки книг',
+      err: err.message,
+    });
+  }
+};
+
+module.exports = { create, load };
