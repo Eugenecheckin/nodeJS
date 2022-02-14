@@ -14,7 +14,7 @@ const Storage = require('../middleware/Storage');
 const bookRouter = Router();
 
 bookRouter.post('/create', isAdmin, Storage, create);
-bookRouter.get('/load', load);
+bookRouter.post('/load', load);
 bookRouter.get('/loadall', loadall);
 bookRouter.get('/loadautors', loadautors);
 bookRouter.get('/loadganres', loadganres);

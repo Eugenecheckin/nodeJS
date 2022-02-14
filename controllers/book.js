@@ -29,15 +29,26 @@ const create = async (request, response) => {
 };
 
 const load = async (request, response) => {
-  const { offset } = request.headers;
-
   try {
+    const { offset } = request.headers;
+    const autor = request.body;
+    if (Object.keys(autor).length > 0) {
+      const autorBook = Object.keys(autor)[0].replace('-', ' ');
+      const loadBook = await db.book.findAndCountAll({
+        where: {
+          autor: autorBook,
+        },
+        raw: true,
+        offset: offset,
+        limit: 10,
+      });
+      return response.status(200).json(loadBook);
+    }
     const loadBook = await db.book.findAndCountAll({
       raw: true,
       offset: offset,
       limit: 10,
     });
-
     response.status(200).json(loadBook);
   } catch (err) {
     return response.status(403).json({
