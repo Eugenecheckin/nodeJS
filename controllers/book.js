@@ -37,6 +37,14 @@ const load = async (request, response) => {
         i.replace('-', ' ')
       );
       const columm = Object.keys(term)[0];
+      const findOption = {
+        where: {},
+        raw: true,
+        offset: 0,
+        limit: 10,
+      };
+      Object.keys(term).forEach((i) => (findOption.where[i] = term[i]));
+      console.log(findOption);
 
       const loadBooks = await db.book.findAndCountAll({
         where: {
