@@ -32,11 +32,15 @@ const load = async (request, response) => {
   try {
     const { offset } = request.headers;
     const term = request.body;
-    if (term.length > 0) {
-      const autorsReplaced = term.map((i) => i.replace('-', ' '));
+    if (Object.keys(term).length > 0) {
+      const termReplaced = term[Object.keys(term)[0]].map((i) =>
+        i.replace('-', ' ')
+      );
+      const columm = Object.keys(term)[0];
+
       const loadBooks = await db.book.findAndCountAll({
         where: {
-          autor: autorsReplaced,
+          autor: termReplaced,
         },
         raw: true,
         offset: offset,
