@@ -31,25 +31,25 @@ const create = async (request, response) => {
 const load = async (request, response) => {
   try {
     const { offset } = request.headers;
-    const autor = request.body;
-    if (Object.keys(autor).length > 0) {
-      const autorBook = Object.keys(autor)[0].replace('-', ' ');
-      const loadBook = await db.book.findAndCountAll({
+    const term = request.body;
+    if (term.length > 0) {
+      const autorsReplaced = term.map((i) => i.replace('-', ' '));
+      const loadBooks = await db.book.findAndCountAll({
         where: {
-          autor: autorBook,
+          autor: autorsReplaced,
         },
         raw: true,
         offset: offset,
         limit: 10,
       });
-      return response.status(200).json(loadBook);
+      return response.status(200).json(loadBooks);
     }
-    const loadBook = await db.book.findAndCountAll({
+    const loadBooks = await db.book.findAndCountAll({
       raw: true,
       offset: offset,
       limit: 10,
     });
-    response.status(200).json(loadBook);
+    response.status(200).json(loadBooks);
   } catch (err) {
     return response.status(403).json({
       message: 'Ошибка загрузки книг',
