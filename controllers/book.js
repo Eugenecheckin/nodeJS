@@ -32,6 +32,7 @@ const load = async (request, response) => {
   try {
     const { offset } = request.headers;
     const term = request.body;
+    console.log(term);
     if (Object.keys(term).length > 0) {
       const findOption = {
         where: {},
@@ -41,10 +42,11 @@ const load = async (request, response) => {
       };
       Object.keys(term).forEach((i) => {
         if (i === 'price') {
-          console.log(i);
-          return;
+          findOption.where[i] = term[i];
+          console.log(term[i]);
+        } else {
+          findOption.where[i] = term[i].map((n) => n.replace('-', ' '));
         }
-        findOption.where[i] = term[i].map((n) => n.replace('-', ' '));
       });
       console.log(findOption);
 
