@@ -33,27 +33,22 @@ const load = async (request, response) => {
     const { offset } = request.headers;
     const term = request.body;
     if (Object.keys(term).length > 0) {
-      const termReplaced = term[Object.keys(term)[0]].map((i) =>
-        i.replace('-', ' ')
-      );
-      const columm = Object.keys(term)[0];
       const findOption = {
         where: {},
         raw: true,
         offset: 0,
         limit: 10,
       };
-      Object.keys(term).forEach((i) => (findOption.where[i] = term[i]));
+      Object.keys(term).forEach((i) => {
+        if (i === 'price') {
+          console.log(i);
+          return;
+        }
+        findOption.where[i] = term[i].map((n) => n.replace('-', ' '));
+      });
       console.log(findOption);
 
-      const loadBooks = await db.book.findAndCountAll({
-        where: {
-          autor: termReplaced,
-        },
-        raw: true,
-        offset: offset,
-        limit: 10,
-      });
+      const loadBooks = await db.book.findAndCountAll(findOption);
       return response.status(200).json(loadBooks);
     }
     const loadBooks = await db.book.findAndCountAll({
