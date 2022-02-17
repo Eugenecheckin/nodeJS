@@ -1,9 +1,11 @@
-const db = require('../models/');
 const Sequelize = require('sequelize');
 const { Op } = require('sequelize');
+const db = require('../models');
 
 const create = async (request, response) => {
-  const { title, autor, year, genre, price } = request.body;
+  const {
+    title, autor, year, genre, price,
+  } = request.body;
   const { fileName } = request.headers;
   console.log(title, autor, year, genre, price, fileName);
   const isCreated = await db.book.findAll({ where: { title } });
@@ -54,7 +56,7 @@ const load = async (request, response) => {
     }
     const loadBooks = await db.book.findAndCountAll({
       raw: true,
-      offset: offset,
+      offset,
       limit: 10,
     });
     response.status(200).json(loadBooks);
@@ -129,4 +131,6 @@ const price = async (request, response) => {
   }
 };
 
-module.exports = { create, load, loadall, loadautors, loadganres, price };
+module.exports = {
+  create, load, loadall, loadautors, loadganres, price,
+};

@@ -1,10 +1,12 @@
 const hash = require('../utils/hash');
 const getToken = require('../utils/getToken.js');
 
-const db = require('../models/');
+const db = require('../models');
 
 const signUp = async (request, response) => {
-  const { fullName, email, password, phone, isAdmin } = request.body;
+  const {
+    fullName, email, password, phone, isAdmin,
+  } = request.body;
   const isRegistred = await db.User.findAll({ where: { email } });
   if (isRegistred.length > 0) {
     return response
@@ -99,7 +101,7 @@ const upload = async (request, response) => {
     if (request.file) {
       const updatedUser = await db.User.update(
         { avatar: fileName },
-        { where: { email } }
+        { where: { email } },
       );
       response.status(200).json(request.file);
     }
@@ -110,4 +112,6 @@ const upload = async (request, response) => {
   }
 };
 
-module.exports = { signUp, login, signIn, test, upload };
+module.exports = {
+  signUp, login, signIn, test, upload,
+};

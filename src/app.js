@@ -1,13 +1,13 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-var cors = require('cors');
+const cors = require('cors');
 const path = require('path');
 const authRoute = require('./routes/auth');
 const userRoute = require('./routes/user');
 const bookRouter = require('./routes/book');
 
 const app = express();
-//app.use(express.json({ extended: true }));
+// app.use(express.json({ extended: true }));
 const jsonParser = bodyParser.json();
 app.use(jsonParser);
 app.use(bodyParser.urlencoded({ extended: true }));

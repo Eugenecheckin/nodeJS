@@ -7,7 +7,7 @@ const storageConfig = multer.diskStorage({
     cb(null, 'fileserver');
   },
   filename: (req, file, cb) => {
-    const name = nanoid() + '.' + file.mimetype.split('/')[1].split('+')[0];
+    const name = `${nanoid()}.${file.mimetype.split('/')[1].split('+')[0]}`;
     cb(null, name);
     req.headers.fileName = name;
   },

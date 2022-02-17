@@ -1,8 +1,11 @@
 const Router = require('express');
 
-const { signUp, signIn, login, test, upload } = require('../controllers/auth');
+const {
+  signUp, signIn, login, test, upload,
+} = require('../controllers/auth');
 const isOwner = require('../middleware/Owner');
 const Storage = require('../middleware/Storage');
+
 const authRouter = Router();
 
 authRouter.post('/upload', isOwner, Storage, upload);

@@ -1,4 +1,4 @@
-const db = require('../models/');
+const db = require('../models');
 
 const hash = require('../utils/hash');
 const getToken = require('../utils/getToken.js');
@@ -11,7 +11,7 @@ const update = async (request, response) => {
     try {
       const updatedUser = await db.User.update(
         { fullName },
-        { where: { email: userEmail } }
+        { where: { email: userEmail } },
       );
       return response.status(200).json({
         result: updatedUser,
@@ -30,7 +30,7 @@ const update = async (request, response) => {
   try {
     const updatedUser = await db.User.update(
       { fullName },
-      { where: { email } }
+      { where: { email } },
     );
     return response.status(200).json({
       result: updatedUser,
@@ -75,7 +75,9 @@ const getList = async (request, response) => {
 };
 
 const create = async (request, response) => {
-  const { fullName, newEmail, password, phone, isAdmin } = request.body;
+  const {
+    fullName, newEmail, password, phone, isAdmin,
+  } = request.body;
   const isRegistred = await db.User.findAll({ where: { email: newEmail } });
   if (isRegistred.length > 0) {
     return response
@@ -103,4 +105,6 @@ const create = async (request, response) => {
   }
 };
 
-module.exports = { update, destroy, create, getList };
+module.exports = {
+  update, destroy, create, getList,
+};
