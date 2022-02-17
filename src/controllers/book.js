@@ -1,5 +1,6 @@
 const db = require('../models/');
 const Sequelize = require('sequelize');
+const { Op } = require('sequelize');
 
 const create = async (request, response) => {
   const { title, autor, year, genre, price } = request.body;
@@ -32,7 +33,6 @@ const load = async (request, response) => {
   try {
     const { offset } = request.headers;
     const term = request.body;
-    console.log(term);
     if (Object.keys(term).length > 0) {
       const findOption = {
         where: {},
@@ -42,14 +42,13 @@ const load = async (request, response) => {
       };
       Object.keys(term).forEach((i) => {
         if (i === 'price') {
-          findOption.where[i] = term[i];
           console.log(term[i]);
+          findOption.where[i] = { [Op.between]: term[i] };
         } else {
           findOption.where[i] = term[i].map((n) => n.replace('-', ' '));
         }
       });
       console.log(findOption);
-
       const loadBooks = await db.book.findAndCountAll(findOption);
       return response.status(200).json(loadBooks);
     }
@@ -60,10 +59,8 @@ const load = async (request, response) => {
     });
     response.status(200).json(loadBooks);
   } catch (err) {
-    return response.status(403).json({
-      message: 'Ошибка загрузки книг',
-      err: err.message,
-    });
+    console.log(err.message);
+    return response.status(404).json({ message: err.message });
   }
 };
 
