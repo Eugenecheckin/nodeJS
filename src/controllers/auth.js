@@ -1,5 +1,5 @@
 const hash = require('../utils/hash');
-const getToken = require('../utils/getToken.js');
+const getToken = require('../utils/getToken');
 
 const db = require('../models');
 
@@ -23,7 +23,7 @@ const signUp = async (request, response) => {
       isAdmin,
     });
     const token = getToken(createdUser);
-    response.status(200).json({
+    return response.status(200).json({
       token,
       id: createdUser.id,
       name: createdUser.fullName,
@@ -38,8 +38,7 @@ const signUp = async (request, response) => {
   }
 };
 const signIn = async (request, response) => {
-  const { email, password } = request.body;
-  const hasPassword = hash(password);
+  const { email } = request.body;
   try {
     const signInUser = await db.User.findOne({ where: { email } });
     const token = getToken(signInUser);
@@ -62,12 +61,12 @@ const signIn = async (request, response) => {
 const login = async (request, response) => {
   const { email } = request.headers;
   try {
-    const allUsers = await db.User.findOne({ where: { email } });
-    response.status(200).json({
-      id: allUsers.id,
-      name: allUsers.fullName,
-      email: allUsers.email,
-      isAdmin: allUsers.isAdmin,
+    const signInUser = await db.User.findOne({ where: { email } });
+    return response.status(200).json({
+      id: signInUser.id,
+      name: signInUser.fullName,
+      email: signInUser.email,
+      isAdmin: signInUser.isAdmin,
       phone: signInUser.phone,
       avatar: signInUser.avatar != null ? signInUser.avatar : '',
     });
@@ -82,7 +81,7 @@ const test = async (request, response) => {
   const email = 'admin@mail.ru';
   try {
     const allUsers = await db.User.findOne({ where: { email } });
-    response.status(200).json({
+    return response.status(200).json({
       id: allUsers.id,
       name: allUsers.fullName,
       email: allUsers.email,
@@ -99,12 +98,10 @@ const upload = async (request, response) => {
   try {
     const { fileName, email } = request.headers;
     if (request.file) {
-      const updatedUser = await db.User.update(
-        { avatar: fileName },
-        { where: { email } },
-      );
-      response.status(200).json(request.file);
+      await db.User.update({ avatar: fileName }, { where: { email } });
+      return response.status(200).json(request.file);
     }
+    return response.status(404).json({ message: 'File not found' });
   } catch (err) {
     return response
       .status(403)
@@ -113,5 +110,9 @@ const upload = async (request, response) => {
 };
 
 module.exports = {
-  signUp, login, signIn, test, upload,
+  signUp,
+  login,
+  signIn,
+  test,
+  upload,
 };

@@ -7,7 +7,6 @@ const create = async (request, response) => {
     title, autor, year, genre, price,
   } = request.body;
   const { fileName } = request.headers;
-  console.log(title, autor, year, genre, price, fileName);
   const isCreated = await db.book.findAll({ where: { title } });
   if (isCreated.length > 0) {
     return response.status(400).json({ message: 'книга уже добавлена' });
@@ -22,7 +21,7 @@ const create = async (request, response) => {
       price,
     });
 
-    response.status(200).json(createdBook);
+    return response.status(200).json(createdBook);
   } catch (err) {
     return response.status(403).json({
       message: 'Ошибка добавленния книги',
@@ -44,7 +43,6 @@ const load = async (request, response) => {
       };
       Object.keys(term).forEach((i) => {
         if (i === 'price') {
-          console.log(term[i]);
           findOption.where[i] = { [Op.between]: term[i] };
         } else {
           findOption.where[i] = term[i].map((n) => n.replace('-', ' '));
@@ -59,9 +57,8 @@ const load = async (request, response) => {
       offset,
       limit: 10,
     });
-    response.status(200).json(loadBooks);
+    return response.status(200).json(loadBooks);
   } catch (err) {
-    console.log(err.message);
     return response.status(404).json({ message: err.message });
   }
 };
@@ -72,7 +69,7 @@ const loadall = async (request, response) => {
       raw: true,
     });
 
-    response.status(200).json(loadBook);
+    return response.status(200).json(loadBook);
   } catch (err) {
     return response.status(403).json({
       message: 'Ошибка загрузки книг',
@@ -88,7 +85,7 @@ const loadautors = async (request, response) => {
       attributes: [Sequelize.fn('DISTINCT', Sequelize.col('autor')), 'autor'],
     });
 
-    response.status(200).json(autors);
+    return response.status(200).json(autors);
   } catch (err) {
     return response.status(403).json({
       message: 'Ошибка загрузки книг',
@@ -104,7 +101,7 @@ const loadganres = async (request, response) => {
       attributes: [Sequelize.fn('DISTINCT', Sequelize.col('genre')), 'genre'],
     });
 
-    response.status(200).json(genres);
+    return response.status(200).json(genres);
   } catch (err) {
     return response.status(403).json({
       message: 'Ошибка загрузки книг',
@@ -115,14 +112,14 @@ const loadganres = async (request, response) => {
 
 const price = async (request, response) => {
   try {
-    const price = await db.book.findAll({
+    const findedBookPrice = await db.book.findAll({
       raw: true,
       attributes: [Sequelize.fn('DISTINCT', Sequelize.col('price')), 'price'],
     });
-    const min = Math.min(...price.map((i) => i.price));
-    const max = Math.max(...price.map((i) => i.price));
+    const min = Math.min(...findedBookPrice.map((i) => i.price));
+    const max = Math.max(...findedBookPrice.map((i) => i.price));
 
-    response.status(200).json({ min, max });
+    return response.status(200).json({ min, max });
   } catch (err) {
     return response.status(403).json({
       message: 'Ошибка загрузки книг',
@@ -132,5 +129,10 @@ const price = async (request, response) => {
 };
 
 module.exports = {
-  create, load, loadall, loadautors, loadganres, price,
+  create,
+  load,
+  loadall,
+  loadautors,
+  loadganres,
+  price,
 };

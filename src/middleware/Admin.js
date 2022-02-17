@@ -14,7 +14,7 @@ module.exports = (request, response, next) => {
     }
     request.headers.isAdmin = verifyResult.isAdmin;
     request.headers.email = verifyResult.email;
-    next();
+    return next();
   } catch (err) {
     return response
       .status(403)

@@ -5,7 +5,7 @@ module.exports = {
       allowNull: false,
     }, { transaction: t }),
   ])),
-  down: (queryInterface, Sequelize) => queryInterface.sequelize.transaction((t) => Promise.all([
+  down: (queryInterface) => queryInterface.sequelize.transaction((t) => Promise.all([
     queryInterface.removeColumn('Users', 'isAdmin', { transaction: t }),
   ])),
 };

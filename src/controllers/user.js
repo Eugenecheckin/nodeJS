@@ -1,7 +1,7 @@
 const db = require('../models');
 
 const hash = require('../utils/hash');
-const getToken = require('../utils/getToken.js');
+const getToken = require('../utils/getToken');
 
 const update = async (request, response) => {
   const { fullName, userEmail } = request.body;
@@ -57,13 +57,13 @@ const destroy = async (request, response) => {
       .json({ message: 'Пользователь удален', userEmail });
   }
   await db.User.destroy({ where: { email } });
-  response.status(200).json({ message: 'Пользователь удален', email });
+  return response.status(200).json({ message: 'Пользователь удален', email });
 };
 
 const getList = async (request, response) => {
   try {
     const users = await db.User.findAll();
-    response.status(200).json(users);
+    return response.status(200).json(users);
   } catch (err) {
     return response
       .status(403)
@@ -94,7 +94,7 @@ const create = async (request, response) => {
       isAdmin,
     });
     const token = getToken(createdUser);
-    response.status(200).json({ token });
+    return response.status(200).json({ token });
   } catch (err) {
     return response
       .status(403)

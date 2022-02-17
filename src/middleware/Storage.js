@@ -3,7 +3,6 @@ const { nanoid } = require('nanoid');
 
 const storageConfig = multer.diskStorage({
   destination: (req, file, cb) => {
-    console.log('is-storege');
     cb(null, 'fileserver');
   },
   filename: (req, file, cb) => {

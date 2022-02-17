@@ -1,3 +1,7 @@
 {
-  "extends": ["airbnb/base"]
+  "extends": ["airbnb/base"],
+  "editor.codeActionsOnSave": {
+    "source.fixAll": false,
+    "source.fixAll.eslint": false
+  }
 }
