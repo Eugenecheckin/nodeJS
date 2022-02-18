@@ -6,6 +6,7 @@
 /.pnp
 .pnp.js
 dump-test1-202202151835.tar
+.eslintrc
 
 # testing
 /coverage

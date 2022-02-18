@@ -38,7 +38,7 @@ const load = async (request, response) => {
       const findOption = {
         where: {},
         raw: true,
-        offset: 0,
+        offset: offset,
         limit: 10,
       };
       Object.keys(term).forEach((i) => {
