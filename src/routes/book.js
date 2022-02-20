@@ -7,8 +7,11 @@ const {
   loadautors,
   loadganres,
   price,
+  loadcart,
+  addtocart,
 } = require('../controllers/book');
 const isAdmin = require('../middleware/Admin');
+const isOwner = require('../middleware/Owner');
 const Storage = require('../middleware/Storage');
 
 const bookRouter = Router();
@@ -19,5 +22,7 @@ bookRouter.get('/loadall', loadall);
 bookRouter.get('/loadautors', loadautors);
 bookRouter.get('/loadganres', loadganres);
 bookRouter.get('/price', price);
+bookRouter.post('/loadcart', isOwner, loadcart);
+bookRouter.post('/addtocart', isOwner, addtocart);
 
 module.exports = bookRouter;

@@ -20,6 +20,7 @@ const create = async (request, response) => {
       cover: fileName,
       price,
     });
+    
 
     return response.status(200).json(createdBook);
   } catch (err) {
@@ -57,8 +58,10 @@ const load = async (request, response) => {
       offset,
       limit: 10,
     });
-    /* const signInUser = await db.User.findOne({ where: { email:'evgeniyit@mail.ru' } });
-    await loadBooks.rows[1].addUsers(signInUser); */
+
+    /*const signInUser = await db.User.findOne({ where: { email:'evgeniyit@mail.ru' } });
+    await loadBooks.rows[1].addUsers(signInUser); 
+    console.log(await signInUser.getBooks());*/
     return response.status(200).json(loadBooks);
   } catch (err) {
     return response.status(404).json({ message: err.message });
@@ -79,6 +82,35 @@ const loadall = async (request, response) => {
     });
   }
 };
+
+const loadcart = async (request, response) => {
+  try {
+    const { email } = request.headers;
+    const owner = await db.User.findOne({ where: { email } });  
+    return response.status(200).json(await owner.getBooks());
+  } catch (err) {
+    return response.status(403).json({
+      message: 'Ошибка загрузки книг',
+      err: err.message,
+    });
+  }
+};
+
+const addtocart = async (request, response) => {
+  try {
+    const { email, bookid } = request.headers;
+    const owner = await db.User.findOne({ where: { email } });
+    const book = await db.book.findOne({ where: { id: bookid } });
+    await book.addUsers(owner);
+    return response.status(200).json(await owner.getBooks());
+  } catch (err) {
+    return response.status(403).json({
+      message: 'Ошибка загрузки книг',
+      err: err.message,
+    });
+  }
+};
+
 
 const loadautors = async (request, response) => {
   try {
@@ -137,4 +169,6 @@ module.exports = {
   loadautors,
   loadganres,
   price,
+  loadcart,
+  addtocart,
 };
