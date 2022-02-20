@@ -48,8 +48,8 @@ const load = async (request, response) => {
           findOption.where[i] = term[i].map((n) => n.replace('-', ' '));
         }
       });
-      console.log(findOption);
-      const loadBooks = await db.book.findAndCountAll(findOption);
+      //console.log(findOption);
+      const loadBooks = await db.book.findAndCountAll(findOption);  
       return response.status(200).json(loadBooks);
     }
     const loadBooks = await db.book.findAndCountAll({
@@ -57,6 +57,8 @@ const load = async (request, response) => {
       offset,
       limit: 10,
     });
+    /* const signInUser = await db.User.findOne({ where: { email:'evgeniyit@mail.ru' } });
+    await loadBooks.rows[1].addUsers(signInUser); */
     return response.status(200).json(loadBooks);
   } catch (err) {
     return response.status(404).json({ message: err.message });
