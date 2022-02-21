@@ -12,7 +12,6 @@ module.exports = {
         onUpdate: 'CASCADE',
         onDelete: 'SET NULL',
       },
-      { transaction: t },
     );
   },
 
@@ -20,7 +19,6 @@ module.exports = {
     return queryInterface.removeColumn(
           'books',
           'genreId',
-          { transaction: t },
         );
   },
 };
