@@ -10,6 +10,7 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       book.belongsToMany(models.User, { through: 'bookUsers' });
+      book.belongsTo(models.genre,{as: 'Genname', foreignKey:'genreId'});      
     }
   }
   book.init(
@@ -51,6 +52,11 @@ module.exports = (sequelize, DataTypes) => {
       updatedAt: {
         allowNull: false,
         type: DataTypes.DATE,
+      },
+      'genreId':
+      {
+        type: DataTypes.INTEGER,
+        allowNull: true,       
       },
     },
     {
