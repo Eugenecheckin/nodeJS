@@ -10,7 +10,8 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       book.belongsToMany(models.User, { through: 'bookUsers' });
-      book.belongsTo(models.genre,{as: 'Genname', foreignKey:'genreId'});      
+      book.belongsTo(models.genre,{as: 'Genname', foreignKey:'genreId'});
+      book.belongsTo(models.genre,{as: 'Autorname', foreignKey:'autorId'});       
     }
   }
   book.init(

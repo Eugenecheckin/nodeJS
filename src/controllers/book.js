@@ -49,16 +49,22 @@ const load = async (request, response) => {
           findOption.where[i] = term[i].map((n) => n.replace('-', ' '));
         }
       });
-      //console.log(findOption);
+      //console.log(findOption);      
       const loadBooks = await db.book.findAndCountAll(findOption);  
       return response.status(200).json(loadBooks);
     }
     const loadBooks = await db.book.findAndCountAll({
-      raw: true,
+      //raw: true,
       offset,
       limit: 10,
     });
+    /* const gen = await db.book.findOne({ where: { id: '11' } });    
+    console.log(gen);
 
+    const gen1 = await gen.getGenname();    
+    console.log(gen1); */
+
+    
     /*const signInUser = await db.User.findOne({ where: { email:'evgeniyit@mail.ru' } });
     await loadBooks.rows[1].addUsers(signInUser); 
     console.log(await signInUser.getBooks());*/
