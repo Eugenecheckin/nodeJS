@@ -120,10 +120,11 @@ const addtocart = async (request, response) => {
 
 const loadautors = async (request, response) => {
   try {
-    const autors = await db.book.findAll({
+    /* const autors = await db.book.findAll({
       raw: true,
       attributes: [Sequelize.fn('DISTINCT', Sequelize.col('autor')), 'autor'],
-    });
+    }); */
+    const autors = await db.autor.findAll({raw: true,});
 
     return response.status(200).json(autors);
   } catch (err) {
@@ -136,10 +137,11 @@ const loadautors = async (request, response) => {
 
 const loadganres = async (request, response) => {
   try {
-    const genres = await db.book.findAll({
+    /* const genres = await db.book.findAll({
       raw: true,
       attributes: [Sequelize.fn('DISTINCT', Sequelize.col('genre')), 'genre'],
-    });
+    }); */
+    const genres = await db.genre.findAll({raw: true,});
 
     return response.status(200).json(genres);
   } catch (err) {
