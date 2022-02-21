@@ -1,4 +1,4 @@
-const db = require('../models');
+const db = require('../../models');
 
 const hash = require('../utils/hash');
 const getToken = require('../utils/getToken');

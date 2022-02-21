@@ -1,6 +1,6 @@
 const Sequelize = require('sequelize');
 const { Op } = require('sequelize');
-const db = require('../models');
+const db = require('../../models');
 
 const create = async (request, response) => {
   const {
