@@ -6,7 +6,7 @@ module.exports = (request, response, next) => {
     const { authorization } = request.headers;
     console.log(authorization);
     const token = authorization.split(' ')[1];
-    
+
     const verifyResult = jwt.verify(token, SECRET);
     request.headers.email = verifyResult.email;
     request.headers.isAdmin = verifyResult.isAdmin;

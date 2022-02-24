@@ -20,7 +20,6 @@ const create = async (request, response) => {
       cover: fileName,
       price,
     });
-    
 
     return response.status(200).json(createdBook);
   } catch (err) {
@@ -35,39 +34,40 @@ const load = async (request, response) => {
   try {
     const { offset } = request.headers;
     const term = request.body;
+
     if (Object.keys(term).length > 0) {
       const findOption = {
         where: {},
         raw: true,
-        offset: offset,
+        offset,
         limit: 10,
       };
       Object.keys(term).forEach((i) => {
+        console.log(term[i]);
         if (i === 'price') {
-          findOption.where[i] = { [Op.between]: term[i] };
+          findOption.where[i] = { [Op.between]: term[i].split('-') };
         } else {
-          findOption.where[i] = term[i].map((n) => n.replace('-', ' '));
+          findOption.where[i] = term[i].split('-');// term[i].map((n) => n.replace('-', ' '));
         }
       });
-      //console.log(findOption);      
-      const loadBooks = await db.book.findAndCountAll(findOption);  
+      console.log(findOption.where);
+      const loadBooks = await db.book.findAndCountAll(findOption);
       return response.status(200).json(loadBooks);
     }
     const loadBooks = await db.book.findAndCountAll({
-      //raw: true,
+      // raw: true,
       offset,
       limit: 10,
     });
-    /* const gen = await db.book.findOne({ where: { id: '11' } });    
+    /* const gen = await db.book.findOne({ where: { id: '11' } });
     console.log(gen);
 
-    const gen1 = await gen.getGenname();    
+    const gen1 = await gen.getGenname();
     console.log(gen1); */
 
-    
-    /*const signInUser = await db.User.findOne({ where: { email:'evgeniyit@mail.ru' } });
-    await loadBooks.rows[1].addUsers(signInUser); 
-    console.log(await signInUser.getBooks());*/
+    /* const signInUser = await db.User.findOne({ where: { email:'evgeniyit@mail.ru' } });
+    await loadBooks.rows[1].addUsers(signInUser);
+    console.log(await signInUser.getBooks()); */
     return response.status(200).json(loadBooks);
   } catch (err) {
     return response.status(404).json({ message: err.message });
@@ -92,7 +92,7 @@ const loadall = async (request, response) => {
 const loadcart = async (request, response) => {
   try {
     const { email } = request.headers;
-    const owner = await db.User.findOne({ where: { email } });  
+    const owner = await db.User.findOne({ where: { email } });
     return response.status(200).json(await owner.getBooks());
   } catch (err) {
     return response.status(403).json({
@@ -117,16 +117,15 @@ const addtocart = async (request, response) => {
   }
 };
 
-
 const loadautors = async (request, response) => {
   try {
     /* const autors = await db.book.findAll({
       raw: true,
       attributes: [Sequelize.fn('DISTINCT', Sequelize.col('autor')), 'autor'],
     }); */
-    const autors = await db.autor.findAll({raw: true,});
+    const autors = await db.autor.findAll({ raw: true });
 
-    return response.status(200).json(autors);
+    return response.status(200).json(autors.map((i) => ({ id: i.id, name: i.name })));
   } catch (err) {
     return response.status(403).json({
       message: 'Ошибка загрузки книг',
@@ -141,9 +140,9 @@ const loadganres = async (request, response) => {
       raw: true,
       attributes: [Sequelize.fn('DISTINCT', Sequelize.col('genre')), 'genre'],
     }); */
-    const genres = await db.genre.findAll({raw: true,});
+    const genres = await db.genre.findAll({ raw: true });
 
-    return response.status(200).json(genres);
+    return response.status(200).json(genres.map((i) => ({ id: i.id, name: i.name })));
   } catch (err) {
     return response.status(403).json({
       message: 'Ошибка загрузки книг',

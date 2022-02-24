@@ -92,7 +92,7 @@ const create = async (request, response) => {
       password: hasPassword,
       phone,
       isAdmin,
-    });    
+    });
     const token = getToken(createdUser);
     return response.status(200).json({ token });
   } catch (err) {
