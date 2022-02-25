@@ -128,7 +128,11 @@ const addcomment = async (request, response) => {
       bookId: term.bookid,
       userId: owner.id,
     });
-    return response.status(200).json(await book.getComments());
+    //return response.status(200).json(await book.getComments());
+    const allComments = await book.getComments();
+    const strInd = allComments.map(i=>i.id);
+    const com = await db.comment.findAll({ where: { id: strInd }, include:[{association: 'Users'}] })    
+    return response.status(200).json(com);
   } catch (err) {
     return response.status(403).json({
       message: 'Ошибка загрузки комментария',
@@ -140,7 +144,11 @@ const loadcomment = async (request, response) => {
   try {
     const term = request.body;
     const book = await db.book.findOne({ where: { id: term.bookid } });
-    return response.status(200).json(await book.getComments());
+    const allComments = await book.getComments();
+    const strInd = allComments.map(i=>i.id);
+    const com = await db.comment.findAll({ where: { id: strInd }, include:[{association: 'Users'}] })
+    
+    return response.status(200).json(com);
   } catch (err) {
     return response.status(403).json({
       message: 'Ошибка загрузки комментария',
