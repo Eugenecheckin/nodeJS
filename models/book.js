@@ -11,7 +11,8 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
       book.belongsToMany(models.User, { through: 'bookUsers' });
       book.belongsTo(models.genre,{as: 'Genname', foreignKey:'genreId'});
-      book.belongsTo(models.genre,{as: 'Autorname', foreignKey:'autorId'});       
+      book.belongsTo(models.genre,{as: 'Autorname', foreignKey:'autorId'});
+      book.hasMany(models.comment, {as: 'Comments', foreignKey:'bookId'});       
     }
   }
   book.init(

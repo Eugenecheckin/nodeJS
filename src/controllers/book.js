@@ -91,9 +91,9 @@ const loadall = async (request, response) => {
 
 const loadcart = async (request, response) => {
   try {
-    const { email } = request.headers;
+    const { email } = request.headers;    
     const owner = await db.User.findOne({ where: { email } });
-    return response.status(200).json(await owner.getBooks());
+    return response.status(200).json(await owner.getBooks());    
   } catch (err) {
     return response.status(403).json({
       message: 'Ошибка загрузки книг',
@@ -116,6 +116,39 @@ const addtocart = async (request, response) => {
     });
   }
 };
+
+const addcomment = async (request, response) => {
+  try {
+    const { email } = request.headers;
+    const term = request.body;
+    const owner = await db.User.findOne({ where: { email } });
+    const book = await db.book.findOne({ where: { id: term.bookid } });
+    const comment = await db.comment.create({
+      comment: term.comment,
+      bookId: term.bookid,
+      userId: owner.id,
+    });
+    return response.status(200).json(await book.getComments());
+  } catch (err) {
+    return response.status(403).json({
+      message: 'Ошибка загрузки комментария',
+      err: err.message,
+    });
+  }
+};
+const loadcomment = async (request, response) => {
+  try {
+    const term = request.body;
+    const book = await db.book.findOne({ where: { id: term.bookid } });
+    return response.status(200).json(await book.getComments());
+  } catch (err) {
+    return response.status(403).json({
+      message: 'Ошибка загрузки комментария',
+      err: err.message,
+    });
+  }
+};
+
 
 const loadautors = async (request, response) => {
   try {
@@ -178,4 +211,6 @@ module.exports = {
   price,
   loadcart,
   addtocart,
+  addcomment,
+  loadcomment,
 };

@@ -2,11 +2,11 @@ module.exports = {
   async up(queryInterface, Sequelize) {
     return queryInterface.addColumn(
       'comments',
-      'autorId',
+      'userId',
       {
         type: Sequelize.DataTypes.INTEGER,
         references: {
-          model: 'autors', // name of Target model
+          model: 'Users', // name of Target model
           key: 'id', // key in Target model that we're referencing
         },
       },
@@ -16,7 +16,7 @@ module.exports = {
   async down(queryInterface) {
     return queryInterface.removeColumn(
           'comments',
-          'autorId',
+          'userId',
         );
   },
 };

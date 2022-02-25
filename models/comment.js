@@ -27,7 +27,17 @@ module.exports = (sequelize, DataTypes) => {
     to: {
       type: DataTypes.INTEGER,
       allowNull: true,
-    }
+    },
+    'bookId':
+    {
+      type: DataTypes.INTEGER,
+      allowNull: true,       
+    },
+    'userId':
+    {
+      type: DataTypes.INTEGER,
+      allowNull: true,       
+    },
   }, {
     sequelize,
     modelName: 'comment',

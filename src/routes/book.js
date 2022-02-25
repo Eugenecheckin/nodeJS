@@ -9,6 +9,8 @@ const {
   price,
   loadcart,
   addtocart,
+  addcomment,
+  loadcomment,
 } = require('../controllers/book');
 const isAdmin = require('../middleware/Admin');
 const isOwner = require('../middleware/Owner');
@@ -24,5 +26,9 @@ bookRouter.get('/loadganres', loadganres);
 bookRouter.get('/price', price);
 bookRouter.post('/loadcart', isOwner, loadcart);
 bookRouter.post('/addtocart', isOwner, addtocart);
+bookRouter.post('/addcomment', isOwner, addcomment);
+bookRouter.post('/loadcomment', loadcomment);
+
+
 
 module.exports = bookRouter;
