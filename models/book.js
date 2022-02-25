@@ -12,7 +12,8 @@ module.exports = (sequelize, DataTypes) => {
       book.belongsToMany(models.User, { through: 'bookUsers' });
       book.belongsTo(models.genre,{as: 'Genname', foreignKey:'genreId'});
       book.belongsTo(models.genre,{as: 'Autorname', foreignKey:'autorId'});
-      book.hasMany(models.comment, {as: 'Comments', foreignKey:'bookId'});       
+      book.hasMany(models.comment, {as: 'Comments', foreignKey:'bookId'});  
+      book.belongsToMany(models.User, { through: 'bookRaiting' });     
     }
   }
   book.init(
