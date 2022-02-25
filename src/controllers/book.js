@@ -122,12 +122,21 @@ const addcomment = async (request, response) => {
     const { email } = request.headers;
     const term = request.body;
     const owner = await db.User.findOne({ where: { email } });
-    const book = await db.book.findOne({ where: { id: term.bookid } });
-    const comment = await db.comment.create({
-      comment: term.comment,
-      bookId: term.bookid,
-      userId: owner.id,
-    });
+    const book = await db.book.findOne({ where: { id: term.bookid } });  
+    if  (term.to=='') {
+      const comment = await db.comment.create({
+        comment: term.comment,
+        bookId: term.bookid,
+        userId: owner.id,
+      });
+    } else {
+      const comment = await db.comment.create({
+        comment: term.comment,
+        bookId: term.bookid,
+        userId: owner.id,
+        to: term.to,
+      });
+    }
     //return response.status(200).json(await book.getComments());
     const allComments = await book.getComments();
     const strInd = allComments.map(i=>i.id);
