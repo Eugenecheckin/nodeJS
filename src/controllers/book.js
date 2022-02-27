@@ -129,11 +129,11 @@ const addRating = async (request, response) => {
     if(exestedRating!==null){
       await db.rating.update({rating: term.rating},{ where: { UserId: owner.id } },)
     } else {
-      /* await db.rating.create({
+       await db.rating.create({
         rating: rating,
         bookId: bookid,
         userId: owner.id,
-      }); */
+      });
     }
     const allRatings = await book.getRatings();
     let resultRating = 0;
