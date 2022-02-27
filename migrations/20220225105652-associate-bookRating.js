@@ -1,18 +1,14 @@
 'use strict';
 
 module.exports = {
-  async up (queryInterface, Sequelize) {
-    /**
-     * Add altering commands here.
-     *
-     * Example:
-     * await queryInterface.createTable('users', { id: Sequelize.INTEGER });
-     */
-  },
-
-  async down (queryInterface, Sequelize) {module.exports = {
     async up(queryInterface, Sequelize) {
-      return queryInterface.createTable('bookRaiting', {
+      return queryInterface.createTable('ratings', {
+        id: {
+          allowNull: false,
+          autoIncrement: true,
+          primaryKey: true,
+          type: Sequelize.INTEGER
+        },
         createdAt: {
           allowNull: false,
           type: Sequelize.DATE,
@@ -22,31 +18,28 @@ module.exports = {
           type: Sequelize.DATE,
         },
         bookId: {
-          type: Sequelize.INTEGER,
-          primaryKey: true,
+          type: Sequelize.DataTypes.INTEGER,
+          references: {
+            model: 'books', // name of Target model
+            key: 'id', // key in Target model that we're referencing
+          },
         },
         UserId: {
-          type: Sequelize.INTEGER,
-          primaryKey: true,
+          type: Sequelize.DataTypes.INTEGER,
+          references: {
+            model: 'Users', // name of Target model
+            key: 'id', // key in Target model that we're referencing
+          },
         },
-        Rating: {
+        rating: {
           allowNull: false,
           type: Sequelize.INTEGER
         },
-
       });
     },
   
     async down(queryInterface) {
-      return queryInterface.dropTable('bookUsers');
+      return queryInterface.dropTable('ratings');
     },
   };
-  
-    /**
-     * Add reverting commands here.
-     *
-     * Example:
-     * await queryInterface.dropTable('users');
-     */
-  }
-};
+

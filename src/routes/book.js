@@ -11,6 +11,8 @@ const {
   addtocart,
   addcomment,
   loadcomment,
+  addRating,
+  loadRating,
 } = require('../controllers/book');
 const isAdmin = require('../middleware/Admin');
 const isOwner = require('../middleware/Owner');
@@ -28,7 +30,7 @@ bookRouter.post('/loadcart', isOwner, loadcart);
 bookRouter.post('/addtocart', isOwner, addtocart);
 bookRouter.post('/addcomment', isOwner, addcomment);
 bookRouter.post('/loadcomment', loadcomment);
-
-
+bookRouter.post('/addrating', isOwner, addRating);
+bookRouter.post('/loadrating', loadRating);
 
 module.exports = bookRouter;

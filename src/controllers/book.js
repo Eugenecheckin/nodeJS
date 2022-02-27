@@ -47,7 +47,7 @@ const load = async (request, response) => {
         if (i === 'price') {
           findOption.where[i] = { [Op.between]: term[i].split('-') };
         } else {
-          findOption.where[i] = term[i].split('-');// term[i].map((n) => n.replace('-', ' '));
+          findOption.where[i] = term[i].split('-');
         }
       });
       console.log(findOption.where);
@@ -116,6 +116,60 @@ const addtocart = async (request, response) => {
     });
   }
 };
+const addRating = async (request, response) => {
+  try {
+    const { email } = request.headers;
+    const term = request.body;
+    
+    console.log(term);
+    const owner = await db.User.findOne({ where: { email } });
+    console.log(owner.id);
+    const book = await db.book.findOne({ where: { id: term.bookid } });
+    const exestedRating = await db.rating.findOne({ where: { UserId: owner.id} })
+    if(exestedRating!==null){
+      await db.rating.update({rating: term.rating},{ where: { UserId: owner.id } },)
+    } else {
+      /* await db.rating.create({
+        rating: rating,
+        bookId: bookid,
+        userId: owner.id,
+      }); */
+    }
+    const allRatings = await book.getRatings();
+    let resultRating = 0;
+     if (allRatings.length > 0){
+      let sum = 0;
+      allRatings.map(i=>i.rating).forEach(s=>sum+=s);
+      console.log(sum);
+      resultRating = Math.round(Math.floor((sum+3.475*2)/(allRatings.length+2)*10)/10);
+    }    
+    return response.status(200).json({resultRating: resultRating});
+  } catch (err) {
+    return response.status(403).json({
+      message: 'Ошибка загрузки книг',
+      err: err.message,
+    });
+  }
+};
+const loadRating = async (request, response) => {
+  try {
+    const term = request.body;       
+    const allRatings = await db.rating.findAll({ where: { bookId: term.bookid } }); 
+    let resultRating = 0;
+     if (allRatings.length > 0){
+      let sum = 0;
+      allRatings.map(i=>i.rating).forEach(s=>sum+=s);
+      resultRating = Math.round(Math.floor((sum+3.475*2)/(allRatings.length+2)*10)/10); 
+    }
+    return response.status(200).json({resultRating: resultRating});
+  } catch (err) {
+    return response.status(403).json({
+      message: 'Ошибка загрузки книг',
+      err: err.message,
+    });
+  }
+};
+
 
 const addcomment = async (request, response) => {
   try {
@@ -230,4 +284,6 @@ module.exports = {
   addtocart,
   addcomment,
   loadcomment,
+  addRating,
+  loadRating,
 };
