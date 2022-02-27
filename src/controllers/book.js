@@ -194,7 +194,7 @@ const addcomment = async (request, response) => {
     //return response.status(200).json(await book.getComments());
     const allComments = await book.getComments();
     const strInd = allComments.map(i=>i.id);
-    const com = await db.comment.findAll({ where: { id: strInd }, include:[{association: 'Users'}] })    
+    const com = await db.comment.findAll({ where: { id: strInd }, include:[{association: 'Users'}] })        
     return response.status(200).json(com);
   } catch (err) {
     return response.status(403).json({
