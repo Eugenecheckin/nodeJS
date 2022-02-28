@@ -5,7 +5,6 @@ const { SECRET } = require('../config');
 function isOwner(request:any, response:any, next:any) {
   try {
     const { authorization } = request.headers;
-    console.log(authorization);
     const token = authorization.split(' ')[1];
 
     const verifyResult = jwt.verify(token, SECRET);

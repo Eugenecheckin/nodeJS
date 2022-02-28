@@ -3,15 +3,15 @@ const Router = require('express');
 import {
   create,
   load,
-  loadall,
-  loadautors,
-  loadganres,
+  loadAll,
+  loadAutors,
+  loadGanres,
   price,
-  loadcart,
-  addtocart,
+  loadCart,
+  addToCart,
   removeToCart,
-  addcomment,
-  loadcomment,
+  addComment,
+  loadComment,
   addRating,
   loadRating,
 } from '../controllers/book';
@@ -23,15 +23,15 @@ const bookRouter = Router();
 
 bookRouter.post('/create', isAdmin, Storage, create);
 bookRouter.post('/load', load);
-bookRouter.get('/loadall', loadall);
-bookRouter.get('/loadautors', loadautors);
-bookRouter.get('/loadganres', loadganres);
+bookRouter.get('/loadall', loadAll);
+bookRouter.get('/loadautors', loadAutors);
+bookRouter.get('/loadganres', loadGanres);
 bookRouter.get('/price', price);
-bookRouter.post('/loadcart', isOwner, loadcart);
-bookRouter.post('/addtocart', isOwner, addtocart);
+bookRouter.post('/loadcart', isOwner, loadCart);
+bookRouter.post('/addtocart', isOwner, addToCart);
 bookRouter.post('/removetocart', isOwner, removeToCart);
-bookRouter.post('/addcomment', isOwner, addcomment);
-bookRouter.post('/loadcomment', loadcomment);
+bookRouter.post('/addcomment', isOwner, addComment);
+bookRouter.post('/loadcomment', loadComment);
 bookRouter.post('/addrating', isOwner, addRating);
 bookRouter.post('/loadrating', loadRating);
 

@@ -1,6 +1,5 @@
 import { Handler } from "express";
 const db = require('../../models');
-
 const hash = require('../utils/hash');
 const getToken = require('../utils/getToken');
 

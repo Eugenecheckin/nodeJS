@@ -1,6 +1,7 @@
 import { Handler } from "express";
 const Sequelize = require('sequelize');
 const { Op } = require('sequelize');
+
 const db = require('../../models');
 
 export const create: Handler = async (request, response) => {
@@ -54,7 +55,6 @@ export const load: Handler = async (request, response) => {
           findOption.where[i] = term[i].split('-');
         }
       });
-      console.log(findOption.where);
       const loadBooks = await db.book.findAndCountAll(findOption);
       return response.status(200).json(loadBooks);
     }
@@ -69,7 +69,7 @@ export const load: Handler = async (request, response) => {
   }
 };
 
-export const loadall: Handler = async (request, response) => {
+export const loadAll: Handler = async (request, response) => {
   try {
     const loadBook = await db.book.findAll({
       raw: true,
@@ -84,7 +84,7 @@ export const loadall: Handler = async (request, response) => {
   }
 };
 
-export const loadcart: Handler = async (request, response) => {
+export const loadCart: Handler = async (request, response) => {
   try {
     const { email } = request.headers;    
     const owner = await db.User.findOne({ where: { email } });
@@ -97,7 +97,7 @@ export const loadcart: Handler = async (request, response) => {
   }
 };
 
-export const addtocart: Handler = async (request, response) => {
+export const addToCart: Handler = async (request, response) => {
   try {
     const { email, bookid } = request.headers;
     const owner = await db.User.findOne({ where: { email } });
@@ -115,9 +115,7 @@ export const removeToCart: Handler = async (request, response) => {
   try {
     const { email, bookid } = request.headers;
     const owner = await db.User.findOne({ where: { email } });
-    console.log(owner);
     const book = await db.book.findOne({ where: { id: bookid } });
-    console.log(book);
     await book.removeUsers(owner);
 
     return response.status(200).json(await owner.getBooks());
@@ -132,10 +130,7 @@ export const addRating: Handler = async (request, response) => {
   try {
     const { email } = request.headers;
     const term = request.body;
-    
-    console.log(term);
     const owner = await db.User.findOne({ where: { email } });
-    console.log(owner.id);
     const book = await db.book.findOne({ where: { id: term.bookid } });
     const exestedRating = await db.rating.findOne({ where: { UserId: owner.id} })
     if(exestedRating!==null){
@@ -183,7 +178,7 @@ export const loadRating: Handler = async (request, response) => {
 };
 
 
-export const addcomment: Handler = async (request, response) => {
+export const addComment: Handler = async (request, response) => {
   try {
     const { email } = request.headers;
     const term = request.body;
@@ -215,7 +210,7 @@ export const addcomment: Handler = async (request, response) => {
     });
   }
 };
-export const loadcomment: Handler = async (request, response) => {
+export const loadComment: Handler = async (request, response) => {
   try {
     const term = request.body;
     const book = await db.book.findOne({ where: { id: term.bookid } });
@@ -233,7 +228,7 @@ export const loadcomment: Handler = async (request, response) => {
 };
 
 
-export const loadautors: Handler = async (request, response) => {
+export const loadAutors: Handler = async (request, response) => {
   try {
     const autors = await db.autor.findAll({ raw: true });
 
@@ -246,7 +241,7 @@ export const loadautors: Handler = async (request, response) => {
   }
 };
 
-export const loadganres: Handler = async (request, response) => {
+export const loadGanres: Handler = async (request, response) => {
   try {
     const genres = await db.genre.findAll({ raw: true });
 
@@ -277,3 +272,18 @@ export const price: Handler = async (request, response) => {
   }
 };
 
+module.exports = {
+  create,
+  load,
+  loadAll,
+  loadAutors,
+  loadGanres,
+  price,
+  loadCart,
+  addToCart,
+  removeToCart,
+  addComment,
+  loadComment,
+  addRating,
+  loadRating,
+};

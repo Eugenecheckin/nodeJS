@@ -97,8 +97,8 @@ export const test: Handler = async (request, response) => {
 };
 
 interface  RequestExtended  { 
-  headers : any  // На самом деле должно быть что-то вроде `multer.Body` 
-  file : any  // На самом деле должно быть что-то вроде `multer.Files` 
+  headers : any
+  file : any
 }
 export async function upload(request: RequestExtended, response : any) {
   try {
