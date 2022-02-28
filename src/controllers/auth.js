@@ -1,6 +1,5 @@
 const hash = require('../utils/hash');
 const getToken = require('../utils/getToken');
-
 const db = require('../../models');
 
 const signUp = async (request, response) => {

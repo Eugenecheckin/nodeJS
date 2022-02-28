@@ -1,5 +1,6 @@
 const Sequelize = require('sequelize');
 const { Op } = require('sequelize');
+
 const db = require('../../models');
 
 const create = async (request, response) => {
@@ -43,14 +44,12 @@ const load = async (request, response) => {
         limit: 10,
       };
       Object.keys(term).forEach((i) => {
-        console.log(term[i]);
         if (i === 'price') {
           findOption.where[i] = { [Op.between]: term[i].split('-') };
         } else {
           findOption.where[i] = term[i].split('-');
         }
       });
-      console.log(findOption.where);
       const loadBooks = await db.book.findAndCountAll(findOption);
       return response.status(200).json(loadBooks);
     }
@@ -59,15 +58,6 @@ const load = async (request, response) => {
       offset,
       limit: 10,
     });
-    /* const gen = await db.book.findOne({ where: { id: '11' } });
-    console.log(gen);
-
-    const gen1 = await gen.getGenname();
-    console.log(gen1); */
-
-    /* const signInUser = await db.User.findOne({ where: { email:'evgeniyit@mail.ru' } });
-    await loadBooks.rows[1].addUsers(signInUser);
-    console.log(await signInUser.getBooks()); */
     return response.status(200).json(loadBooks);
   } catch (err) {
     return response.status(404).json({ message: err.message });
@@ -120,9 +110,7 @@ const removeToCart = async (request, response) => {
   try {
     const { email, bookid } = request.headers;
     const owner = await db.User.findOne({ where: { email } });
-    console.log(owner);
     const book = await db.book.findOne({ where: { id: bookid } });
-    console.log(book);
     await book.removeUsers(owner);
 
     return response.status(200).json(await owner.getBooks());
@@ -137,10 +125,7 @@ const addRating = async (request, response) => {
   try {
     const { email } = request.headers;
     const term = request.body;
-    
-    console.log(term);
     const owner = await db.User.findOne({ where: { email } });
-    console.log(owner.id);
     const book = await db.book.findOne({ where: { id: term.bookid } });
     const exestedRating = await db.rating.findOne({ where: { UserId: owner.id} })
     if(exestedRating!==null){
@@ -157,7 +142,6 @@ const addRating = async (request, response) => {
      if (allRatings.length > 0){
       let sum = 0;
       allRatings.map(i=>i.rating).forEach(s=>sum+=s);
-      console.log(sum);
       resultRating = Math.round(Math.floor((sum+3.475*2)/(allRatings.length+2)*10)/10);
     }    
     return response.status(200).json({resultRating: resultRating});
@@ -240,10 +224,6 @@ const loadcomment = async (request, response) => {
 
 const loadautors = async (request, response) => {
   try {
-    /* const autors = await db.book.findAll({
-      raw: true,
-      attributes: [Sequelize.fn('DISTINCT', Sequelize.col('autor')), 'autor'],
-    }); */
     const autors = await db.autor.findAll({ raw: true });
 
     return response.status(200).json(autors.map((i) => ({ id: i.id, name: i.name })));
@@ -257,10 +237,6 @@ const loadautors = async (request, response) => {
 
 const loadganres = async (request, response) => {
   try {
-    /* const genres = await db.book.findAll({
-      raw: true,
-      attributes: [Sequelize.fn('DISTINCT', Sequelize.col('genre')), 'genre'],
-    }); */
     const genres = await db.genre.findAll({ raw: true });
 
     return response.status(200).json(genres.map((i) => ({ id: i.id, name: i.name })));

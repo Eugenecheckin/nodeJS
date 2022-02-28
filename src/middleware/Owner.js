@@ -4,7 +4,6 @@ const { SECRET } = require('../config');
 module.exports = (request, response, next) => {
   try {
     const { authorization } = request.headers;
-    console.log(authorization);
     const token = authorization.split(' ')[1];
 
     const verifyResult = jwt.verify(token, SECRET);

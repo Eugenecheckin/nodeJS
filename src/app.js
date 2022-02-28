@@ -7,7 +7,6 @@ const userRoute = require('./routes/user');
 const bookRouter = require('./routes/book');
 
 const app = express();
-// app.use(express.json({ extended: true }));
 const jsonParser = bodyParser.json();
 app.use(jsonParser);
 app.use(bodyParser.urlencoded({ extended: true }));
