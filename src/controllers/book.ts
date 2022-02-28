@@ -31,7 +31,6 @@ export const create: Handler = async (request, response) => {
     });
   }
 };
-interface IStringObject{[index: string]:any}
 
 export const load: Handler = async (request, response) => {
   try {
@@ -147,7 +146,6 @@ export const addRating: Handler = async (request, response) => {
      if (allRatings.length > 0){
       let sum = 0;
       allRatings.map((i:any)=>i.rating).forEach((s:any)=>sum+=s);
-      console.log(sum);
       resultRating = Math.round(Math.floor((sum+3.475*2)/(allRatings.length+2)*10)/10);
     }    
     return response.status(200).json({resultRating: resultRating});
@@ -188,7 +186,7 @@ export const addComment: Handler = async (request, response) => {
       const comment = await db.comment.create({
         comment: term.comment,
         bookId: term.bookid,
-        userId: owner.id,
+        userId: owner.id,        
       });
     } else {
       const comment = await db.comment.create({
@@ -198,7 +196,6 @@ export const addComment: Handler = async (request, response) => {
         to: term.to,
       });
     }
-    //return response.status(200).json(await book.getComments());
     const allComments = await book.getComments();
     const strInd = allComments.map((i:any)=>i.id);
     const com = await db.comment.findAll({ where: { id: strInd }, include:[{association: 'Users'}] })        
@@ -226,7 +223,6 @@ export const loadComment: Handler = async (request, response) => {
     });
   }
 };
-
 
 export const loadAutors: Handler = async (request, response) => {
   try {
