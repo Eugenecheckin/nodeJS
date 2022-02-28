@@ -1,9 +1,10 @@
-const Router = require('express');
-
-const {
+import {
   signUp, signIn, login, test, upload,
-} = require('../controllers/auth');
-const isOwner = require('../middleware/Owner');
+} from '../controllers/auth';
+
+import Router = require('express');
+
+import isOwner from '../middleware/Owner';
 const Storage = require('../middleware/Storage');
 
 const authRouter = Router();
@@ -14,4 +15,4 @@ authRouter.post('/signup', signUp);
 authRouter.post('/signin', signIn);
 authRouter.get('/login', isOwner, login);
 
-module.exports = authRouter;
+export default authRouter;

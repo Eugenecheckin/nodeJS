@@ -1,10 +1,10 @@
-const express = require('express');
-const bodyParser = require('body-parser');
+import express from 'express';
+import bodyParser from 'body-parser';
 const cors = require('cors');
-const path = require('path');
-const authRoute = require('./routes/auth');
-const userRoute = require('./routes/user');
-const bookRouter = require('./routes/book');
+import path from 'path';
+import authRoute from './routes/auth';
+import userRoute from './routes/user';
+import bookRouter from './routes/book';
 
 const app = express();
 // app.use(express.json({ extended: true }));
@@ -17,4 +17,4 @@ app.use('/Auth', authRoute);
 app.use('/User', userRoute);
 app.use('/book', bookRouter);
 
-module.exports = app;
+export default app;

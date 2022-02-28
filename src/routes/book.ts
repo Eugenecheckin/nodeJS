@@ -1,6 +1,6 @@
 const Router = require('express');
 
-const {
+import {
   create,
   load,
   loadall,
@@ -14,9 +14,9 @@ const {
   loadcomment,
   addRating,
   loadRating,
-} = require('../controllers/book');
+} from '../controllers/book';
 const isAdmin = require('../middleware/Admin');
-const isOwner = require('../middleware/Owner');
+import isOwner from '../middleware/Owner';
 const Storage = require('../middleware/Storage');
 
 const bookRouter = Router();
@@ -35,4 +35,4 @@ bookRouter.post('/loadcomment', loadcomment);
 bookRouter.post('/addrating', isOwner, addRating);
 bookRouter.post('/loadrating', loadRating);
 
-module.exports = bookRouter;
+export default bookRouter;

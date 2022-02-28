@@ -1,7 +1,8 @@
+import { Handler } from "express";
 const jwt = require('jsonwebtoken');
 const { SECRET } = require('../config');
 
-module.exports = (request, response, next) => {
+function isOwner(request:any, response:any, next:any) {
   try {
     const { authorization } = request.headers;
     console.log(authorization);
@@ -17,3 +18,5 @@ module.exports = (request, response, next) => {
       .json({ message: 'Пользователь не авторизован' });
   }
 };
+
+export default isOwner;

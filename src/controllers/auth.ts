@@ -1,9 +1,11 @@
+import { Handler } from "express";
+
 const hash = require('../utils/hash');
 const getToken = require('../utils/getToken');
-
 const db = require('../../models');
 
-const signUp = async (request, response) => {
+
+export const signUp: Handler = async (request, response) => {
   const {
     fullName, email, password, phone, isAdmin,
   } = request.body;
@@ -37,7 +39,7 @@ const signUp = async (request, response) => {
     });
   }
 };
-const signIn = async (request, response) => {
+export const signIn: Handler = async (request, response) => {
   const { email } = request.body;
   try {
     const signInUser = await db.User.findOne({ where: { email } });
@@ -58,7 +60,7 @@ const signIn = async (request, response) => {
   }
 };
 
-const login = async (request, response) => {
+export const login: Handler = async (request, response) => {
   const { email } = request.headers;
   try {
     const signInUser = await db.User.findOne({ where: { email } });
@@ -77,7 +79,7 @@ const login = async (request, response) => {
   }
 };
 
-const test = async (request, response) => {
+export const test: Handler = async (request, response) => {
   const email = 'admin@mail.ru';
   try {
     const allUsers = await db.User.findOne({ where: { email } });
@@ -94,7 +96,11 @@ const test = async (request, response) => {
   }
 };
 
-const upload = async (request, response) => {
+interface  RequestExtended  { 
+  headers : any  // На самом деле должно быть что-то вроде `multer.Body` 
+  file : any  // На самом деле должно быть что-то вроде `multer.Files` 
+}
+export async function upload(request: RequestExtended, response : any) {
   try {
     const { fileName, email } = request.headers;
     if (request.file) {
@@ -107,12 +113,4 @@ const upload = async (request, response) => {
       .status(403)
       .json({ message: 'Ошибка загрузки', err: err.message });
   }
-};
-
-module.exports = {
-  signUp,
-  login,
-  signIn,
-  test,
-  upload,
 };

@@ -1,9 +1,10 @@
+import { Handler } from "express";
 const db = require('../../models');
 
 const hash = require('../utils/hash');
 const getToken = require('../utils/getToken');
 
-const update = async (request, response) => {
+export const update: Handler = async (request, response) => {
   const { fullName, userEmail } = request.body;
   const { email, isAdmin } = request.headers;
 
@@ -47,7 +48,7 @@ const update = async (request, response) => {
   }
 };
 
-const destroy = async (request, response) => {
+export const destroy: Handler = async (request, response) => {
   const { isAdmin, email } = request.headers;
   if (isAdmin === 'true') {
     const { userEmail } = request.body;
@@ -60,7 +61,7 @@ const destroy = async (request, response) => {
   return response.status(200).json({ message: 'Пользователь удален', email });
 };
 
-const getList = async (request, response) => {
+export const getList: Handler = async (request, response) => {
   try {
     const users = await db.User.findAll();
     return response.status(200).json(users);
@@ -74,7 +75,7 @@ const getList = async (request, response) => {
   }
 };
 
-const create = async (request, response) => {
+export const create: Handler = async (request, response) => {
   const {
     fullName, newEmail, password, phone, isAdmin,
   } = request.body;
@@ -105,6 +106,3 @@ const create = async (request, response) => {
   }
 };
 
-module.exports = {
-  update, destroy, create, getList,
-};
