@@ -116,6 +116,23 @@ const addtocart = async (request, response) => {
     });
   }
 };
+const removeToCart = async (request, response) => {
+  try {
+    const { email, bookid } = request.headers;
+    const owner = await db.User.findOne({ where: { email } });
+    console.log(owner);
+    const book = await db.book.findOne({ where: { id: bookid } });
+    console.log(book);
+    await book.removeUsers(owner);
+
+    return response.status(200).json(await owner.getBooks());
+  } catch (err) {
+    return response.status(403).json({
+      message: 'Ошибка загрузки книг',
+      err: err.message,
+    });
+  }
+};
 const addRating = async (request, response) => {
   try {
     const { email } = request.headers;
@@ -282,6 +299,7 @@ module.exports = {
   price,
   loadcart,
   addtocart,
+  removeToCart,
   addcomment,
   loadcomment,
   addRating,

@@ -9,6 +9,7 @@ const {
   price,
   loadcart,
   addtocart,
+  removeToCart,
   addcomment,
   loadcomment,
   addRating,
@@ -28,6 +29,7 @@ bookRouter.get('/loadganres', loadganres);
 bookRouter.get('/price', price);
 bookRouter.post('/loadcart', isOwner, loadcart);
 bookRouter.post('/addtocart', isOwner, addtocart);
+bookRouter.post('/removetocart', isOwner, removeToCart);
 bookRouter.post('/addcomment', isOwner, addcomment);
 bookRouter.post('/loadcomment', loadcomment);
 bookRouter.post('/addrating', isOwner, addRating);
