@@ -64,7 +64,7 @@ const load = async (request, response) => {
   }
 };
 
-const loadall = async (request, response) => {
+const loadAll = async (request, response) => {
   try {
     const loadBook = await db.book.findAll({
       raw: true,
@@ -79,7 +79,7 @@ const loadall = async (request, response) => {
   }
 };
 
-const loadcart = async (request, response) => {
+const loadCart = async (request, response) => {
   try {
     const { email } = request.headers;    
     const owner = await db.User.findOne({ where: { email } });
@@ -92,7 +92,7 @@ const loadcart = async (request, response) => {
   }
 };
 
-const addtocart = async (request, response) => {
+const addToCart = async (request, response) => {
   try {
     const { email, bookid } = request.headers;
     const owner = await db.User.findOne({ where: { email } });
@@ -172,7 +172,7 @@ const loadRating = async (request, response) => {
 };
 
 
-const addcomment = async (request, response) => {
+const addComment = async (request, response) => {
   try {
     const { email } = request.headers;
     const term = request.body;
@@ -204,7 +204,7 @@ const addcomment = async (request, response) => {
     });
   }
 };
-const loadcomment = async (request, response) => {
+const loadComment = async (request, response) => {
   try {
     const term = request.body;
     const book = await db.book.findOne({ where: { id: term.bookid } });
@@ -222,7 +222,7 @@ const loadcomment = async (request, response) => {
 };
 
 
-const loadautors = async (request, response) => {
+const loadAutors = async (request, response) => {
   try {
     const autors = await db.autor.findAll({ raw: true });
 
@@ -235,7 +235,7 @@ const loadautors = async (request, response) => {
   }
 };
 
-const loadganres = async (request, response) => {
+const loadGanres = async (request, response) => {
   try {
     const genres = await db.genre.findAll({ raw: true });
 
@@ -269,15 +269,15 @@ const price = async (request, response) => {
 module.exports = {
   create,
   load,
-  loadall,
-  loadautors,
-  loadganres,
+  loadAll,
+  loadAutors,
+  loadGanres,
   price,
-  loadcart,
-  addtocart,
+  loadCart,
+  addToCart,
   removeToCart,
-  addcomment,
-  loadcomment,
+  addComment,
+  loadComment,
   addRating,
   loadRating,
 };
