@@ -24,7 +24,7 @@ export const signUp: Handler = async (request, response) => {
       phone,
       isAdmin,
     });
-    const token = getToken(createdUser);
+    const token = getToken(createdUser);    
     return response.status(200).json({
       token,
       id: createdUser.id,
@@ -43,7 +43,7 @@ export const signIn: Handler = async (request, response) => {
   const { email } = request.body;
   try {
     const signInUser = await db.User.findOne({ where: { email } });
-    const token = getToken(signInUser);
+    const token: string = getToken(signInUser);
     return response.status(200).json({
       token,
       id: signInUser.id,
