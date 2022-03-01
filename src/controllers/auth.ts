@@ -64,7 +64,9 @@ export const login: Handler = async (request, response) => {
   const { email } = request.headers;
   try {
     const signInUser = await db.User.findOne({ where: { email } });
+    const token: string = getToken(signInUser);
     return response.status(200).json({
+      token,
       id: signInUser.id,
       name: signInUser.fullName,
       email: signInUser.email,
