@@ -19,8 +19,9 @@ io.use((socket:any, next:any) => {
 io.on("connection", (socket:any) => {
   // fetch existing users
   const users = [];
-  for (let [ socket] of io.of("/").sockets) {
+  for (let [ id, socket] of io.of("/").sockets) {
     users.push({
+      userID: id,
       testMess: socket.testMess,
     });
   }
