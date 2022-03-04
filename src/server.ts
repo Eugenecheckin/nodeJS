@@ -5,14 +5,18 @@ import http  from 'http';
 const { Server } = require('socket.io');
 
 const server = http.createServer(app);
-const io = new Server(server);
+const io = new Server(server, {
+  cors: {
+    origin: "http://localhost:3000",
+  },
+});
 
 io.use((socket:any, next:any) => {
-  const testMess = socket.handshake.auth.testMess;
-  if (!testMess) {
+  const email = socket.handshake.auth.email;
+  if (!email) {
     return next(new Error("invalid username"));
   }
-  socket.testMess = testMess;
+  socket.email = email;
   next();
 });
 
@@ -22,15 +26,33 @@ io.on("connection", (socket:any) => {
   for (let [ id, socket] of io.of("/").sockets) {
     users.push({
       userID: id,
-      testMess: socket.testMess,
+      email: socket.email,
     });
   }
   socket.emit("users", users);
 
   // notify existing users
   socket.broadcast.emit("user connected", {
-    username: socket.testMess,
+    email: socket.email,
   });
+
+  socket.on("repost", ({ to, from }:any) => {
+    for (let [ id, socket] of io.of("/").sockets) {
+      if(socket.email===to) {     
+        socket.emit("users", {
+          userID: socket.id,
+          email: socket.email,
+          from: from,
+        });
+      }      
+    }    
+  });
+
+  // notify users upon disconnection
+  socket.on("disconnect", () => {
+    socket.broadcast.emit("user disconnected", socket.email);
+  });
+
 });
 
 server.listen(PORT, () => {
