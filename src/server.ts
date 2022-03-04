@@ -36,7 +36,7 @@ io.on("connection", (socket:any) => {
     email: socket.email,
   });
 
-  socket.on("repost", ({ to, from }:any) => {
+  /* socket.on("repost", ({ to, from }:any) => {
     for (let [ id, socket] of io.of("/").sockets) {
       if(socket.email===to) {     
         socket.emit("users", {
@@ -46,6 +46,18 @@ io.on("connection", (socket:any) => {
         });
       }      
     }    
+  }); */
+
+  socket.on("repost", ({ to, from }:any) => {
+    for (let [ id, destSocket] of io.of("/").sockets) {
+      if(destSocket.email===to) {
+        socket.to(destSocket.id).emit("private message", {
+          userID: destSocket.id,
+          email: destSocket.email,
+          from: from,
+        });
+      }
+    }
   });
 
   // notify users upon disconnection
