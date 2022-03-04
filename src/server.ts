@@ -48,13 +48,14 @@ io.on("connection", (socket:any) => {
     }    
   }); */
 
-  socket.on("repost", ({ to, from }:any) => {
+  socket.on("repost", ({ to, from, text }:any) => {
     for (let [ id, destSocket] of io.of("/").sockets) {
       if(destSocket.email===to) {
         socket.to(destSocket.id).emit("private message", {
           userID: destSocket.id,
           email: destSocket.email,
           from: from,
+          text: text,
         });
       }
     }
