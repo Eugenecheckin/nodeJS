@@ -1,6 +1,7 @@
 import {
-  signUp, signIn, login, test, upload,
+  signUp, signIn, login, test, upload
 } from '../controllers/auth';
+import { forgotPass, confirmEmail, confirmPass } from '../controllers/changePass';
 
 import Router = require('express');
 
@@ -14,5 +15,8 @@ authRouter.get('/test', test);
 authRouter.post('/signup', signUp);
 authRouter.post('/signin', signIn);
 authRouter.post('/login', isOwner, login);
+authRouter.post('/forgotPass', forgotPass);
+authRouter.post('/confirmEmail', confirmEmail);
+authRouter.post('/confirmPass', confirmPass);
 
 export default authRouter;

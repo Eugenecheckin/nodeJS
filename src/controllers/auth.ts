@@ -4,11 +4,15 @@ const hash = require('../utils/hash');
 const getToken = require('../utils/getToken');
 const db = require('../../models');
 
+const CryptoJS = require('crypto-js');
+const { HASH_MESS } = require('../config');
+
 
 export const signUp: Handler = async (request, response) => {
   const {
     fullName, email, password, phone, isAdmin,
   } = request.body;
+  console.log(fullName);
   const isRegistred = await db.User.findAll({ where: { email } });
   if (isRegistred.length > 0) {
     return response
@@ -40,19 +44,39 @@ export const signUp: Handler = async (request, response) => {
   }
 };
 export const signIn: Handler = async (request, response) => {
-  const { email } = request.body;
+  console.log('!!!!!!!!!!!!!!');
+  
+  const { email, password } = request.body;
   try {
     const signInUser = await db.User.findOne({ where: { email } });
-    const token: string = getToken(signInUser);
-    return response.status(200).json({
-      token,
-      id: signInUser.id,
-      name: signInUser.fullName,
-      email: signInUser.email,
-      phone: signInUser.phone,
-      avatar: signInUser.avatar != null ? signInUser.avatar : '',
-      isAdmin: signInUser.isAdmin,
-    });
+    const bytes = CryptoJS.AES.decrypt(signInUser.password, HASH_MESS);
+    const toConfirmPass = bytes.toString(CryptoJS.enc.Utf8);
+
+    if (password===toConfirmPass) {
+      const token: string = getToken(signInUser);
+      const hghghggdsh = {
+        token,
+        id: signInUser.id,
+        name: signInUser.fullName,
+        email: signInUser.email,
+        phone: signInUser.phone,
+        avatar: signInUser.avatar != null ? signInUser.avatar : '',
+        isAdmin: signInUser.isAdmin,
+      };
+      console.log(hghghggdsh);
+      
+      return response.status(200).json({
+        token,
+        id: signInUser.id,
+        name: signInUser.fullName,
+        email: signInUser.email,
+        phone: signInUser.phone,
+        avatar: signInUser.avatar != null ? signInUser.avatar : '',
+        isAdmin: signInUser.isAdmin,
+      });
+    } else {
+      return response.status(400).json({password: "not confirm"})
+    }
   } catch (err) {
     return response
       .status(403)
